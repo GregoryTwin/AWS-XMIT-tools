@@ -29,3 +29,5 @@ DEXMIT   - extracts IEBCOPY image from XMIT file;
 REXLINK  - quickly associate .rex extension with OOREXX (REXLINK OOREXX)
            or REGINA (REXLINK REGINA); 
 UNPACK   - unpack data packed by CMS COPYFILE or TSO/ISPF EDIT
+
+Note: this project origin is Sourceforge
