@@ -1,0 +1,239 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head><title>DEXMIT - extract IEBCOPY image from XMIT (TRANSMIT, IDTF) image</title></head>
+<style>
+body {background-color:white;color:black;font-family:Verdana;}
+td.n, td.b {font-family:Verdana;font-weight:normal;font-size:12pt;}
+td.n {font-weight:normal;}
+td.b {font-weight:bold; width: 120px;}
+a.plain, a.plain:link, a.plain:hover {color:black;}
+table.screen {background-color: black; border-spacing: 0px 0px 0px 0px;
+    border-collapse: collapse;}
+table.screen tr {background-color: black; }
+table.screen tr td {display: block; unicode-bidi: embed;
+   font-family: monospace; font-size: 16px; white-space: pre;
+   padding: 0px; margin: 0px; height: 18px; }
+span.brite {background-color:lightyellow;color:black;}
+span.border {border: 1px solid black;}
+span.green, span.turq, span.white, span.blue, span.red,
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {background:black;font-style:normal;}
+span.green, span.turq, span.white, span.blue, span.red, span.yellow
+ {font-weight:normal;}
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {font-weight:bold;}
+span.turq, span.turqbold {color:turquoise;}
+span.white, span.whitebold {color:white;}
+span.green {color:green;}
+span.blue {color:deepSkyBlue;}
+span.red, span.redbold {color:red;}
+span.yellow {color:yellow;}
+span.jcl {color:black; font-weight:normal; font-style:normal; font-size:10pt;}
+span.cursor
+ {color:black; background:green; font-weight:normal; font-style:normal;}
+span.cmd, span.hrc, span.sys { font-family: Courier; font-weight: bold; white-space: nowrap;}
+span.sys { color: black; background-color: lightgrey; }
+span.cmd { color: lightgrey; background-color: black; }
+span.hrc { color: yellow; background-color: black; }
+div.sticky { position: -webkit-sticky; /* Safari */ position:sticky; float:right; top:0;}
+</style>
+<script>
+function RU() {
+  view('RU', 'block');
+  view('EN', 'none');
+}
+
+function EN() {
+  view('RU', 'none');
+  view('EN', 'block');
+}
+
+function view(lang, attr) {
+  Array.from(document.getElementsByClassName(lang)).forEach (item => { item.style.display = attr; });
+}
+
+</script>
+<body onload=EN();>
+<div class=sticky>
+<button id="EN" type="button" onclick="EN()" title="EN"><span style="font-size:14px;">EN</span>
+<button id="RU" type="button" onclick="RU()" title="RU"><span style="font-size:14px;">RU</span>
+</button>
+</div>
+
+<table>
+<tr><td class=b>
+<span class=en>Function:</span>
+<span class=ru>Функция:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<span class=en>Extract IEBCOPY unloaded data set from XMIT (TRANSMIT, IDTF) image.</span>
+<span class=ru>Извлечение выгруженного набора IEBCOPY из набора данных выгруженного XMIT (TRANSMIT, IDTF).</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Syntax:</span><span class=ru>Формат:</span><td>&nbsp;<tr><td class=n>&nbsp;
+<tr><td class=b>&nbsp;<td class=n><span class=border>&nbsp;<b>DEXMIT</b>&nbsp; <i>input</i> [<i>output</i>]</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Prerequested</span><span class=ru>Требования:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<ul>
+<li><span class=en>Either Open object REXX (OOREXX) or Regina REXX</span><span class=ru>Open Object REXX (OOREXX) либо Regina REXX</span>
+<li><span class=en>File extension .rex must be properly associated</span><span class=ru>Расширение имени файлов .rex должно быть правильно ассоциировано</span>
+</ul></td>
+
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Installation</span><span class=ru>Установка</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<span class=en>Installation procedure not required.</span>
+<span class=ru>Какая-либо специальная установка не требуется.</span>
+</td>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Usage:</span><span class=ru>Применение</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<span class=en>Procedure DEXMIT has single mandatory parameter <i>input</i> - an original XMIT file name.
+Second optional parameter <i>output</i> may specified processed IEBCOPY file name. If it is missed,
+an original unloaded data set name is used.
+<br><br>The main purpose of DEXMIT - alternate data transfer method (together with AWSDUMP)
+to the ancient operation systems running on Hercules/Hyperion, like TKS or OC PB,
+because IDTF (TSO TRANSMIT/RECEIVE), IND$FILE and FTP are missed there.
+<br><br>Principally, an idea is XMIT to AWS tape conversion. Let's consider this data transfer method on CBTTAPE file as an example:
+<ul>
+<li>download desired CBTTAPE file;
+<li>extract XMIT file from ZIP archieve with 7zip (or pkunzip, winrar etc.)
+<li>extract IEBCOPY image from XMIT file with DEXMIT;
+<li>write AWS tape image with IEBCOPY image AWSDUMP;
+<li>attach AWS tape image to target system;
+<li>restore an original data set from AWS tape with job shown below
+</ul>
+</span>
+<span class=ru>Процедура DEXMIT имеет один обязательный параметр <i>input</i> - имя оригинального XMIT 
+файла. Второй необязательный параметр <i>output</i> может указывать имя обработанного IEBCOPY файла.
+Если второй параметр не указан, используется имя оригинального набора данных.
+<br><br>Основное назначение DEXMIT - перенос данных в древние операционные 
+системы, такие как TKS или OC PB, в которых нет IDTF (TSO TRANSMIT/RECEIVE) и отсутствуют штатные средства передачи
+данных (IND$FILE, FTP).
+<br><br>Принципиальная идея передачи данных базируется на преобразовании
+файла XMIT в образ ленты AWS. Рассмотрим передачу данных на примере обработки файла
+CBTTAPE:
+<ul>
+<li>загрузка требуемого файла из CBTTAPE.org;
+<li>извлечение файла XMIT из архива ZIP с помощью 7zip (или pkunzip, winrar etc.)
+<li>извлечение образа IEBCOPY из файла XMIT с помощью DEXMIT;
+<li>запись файла IEBCOPY на ленту AWS с помощью AWSDUMP;
+<li>установка ленты AWS в целевую систему;
+<li>восстановление оригинального набора данных с ленты AWS заданием, приведенным ниже
+</ul>
+</span>
+<table class=screen>
+<tr><td><span class=white>dexmit FILE145.XMI FILE145.IEBCOPY
+<tr><td><span class=yellow>021I Data set 'CBT.V505.FILE145.PDS' from SBGOLOB at S0W1          
+<tr><td><span class=white>022I Original data set attributes: DSORG=PO,RECFM=U,LRECL=0,BLKSIZE=6144
+<tr><td><span class=white>023I Original data set allocation: SPACE=(6144,(33,16,6))
+<tr><td><span class=white>024I Unloaded data set attributes: DSORG=PS,RECFM=VS,LRECL=6160,BLKSIZE=6164&nbsp;
+<tr><td><span class=white>
+<tr><td><span class=white>awsdump.rex -b FILE145.IEBCOPY CBT145.aws 1 VBS 6160 6164
+<tr><td><span class=white>
+<tr><td><span class=white>
+<tr><td><span class=white>
+<tr><td><span class=white>
+<tr><td><span class=white>
+<tr><td><span class=white>
+<tr><td>
+</table>
+<br><span class=en>Note: AWSDUMP parameters (VBS 6160 6164) taken from DEXMIT message 024I</span>
+<span class=ru>Примечание: параметры AWSDUMP (VBS 6160 6164) указываются в сообщении 024I</span>
+<br><span class=en><b>Load job:</b></span><span class=ru><b>Задание для загрузки:</b></span>
+<pre>
+//CBT145   JOB MSGCLASS=A,MSGLEVEL=(1,1)
+//RECYCLE  EXEC PGM=IEFBR14
+//FILE145  DD DSN=CBT.FILE145.PDS,DISP=(MOD,DELETE),
+//            VOL=SER=TKS430,UNIT=5063,
+//            SPACE=(6144,(33,16,6))
+//LOAD     EXEC PGM=IEBCOPY
+//SYSPRINT DD SYSOUT=A
+//I        DD DSN=FILE145.IEBCOPY,DISP=OLD,VOL=SER=CBT145,
+//            LABEL=(1,SL),UNIT=5010
+//O        DD DSN=CBT.FILE145.PDS,DISP=(NEW,CATLG),
+//            VOL=SER=TKS430,UNIT=5063,
+//            SPACE=(6144,(33,16,6))
+//SYSUT3   DD SPACE=(TRK,(5,5)),UNIT=SYSDA
+//SYSIN    DD *
+  COPY INDD=I,OUTDD=O
+//
+</pre>
+<span class=en>Note: space allocation parameters - SPACE=(6144,(33,16,6)) - taken
+from DEXMIT message 023I</span>
+<span class=ru>Примечание: параметры распределения памяти - SPACE=(6144,(33,16,6)) - указываются
+в сообщении 023I DEXMIT</span>
+<br>
+<span class=en><b>Load job listing:</b></span>
+<span class=ru><b>Вывод задания загрузки:</b></span>
+<pre>
+//CBT145   JOB MSGCLASS=A,MSGLEVEL=(1,1)
+//RECYCLE  EXEC PGM=IEFBR14
+//FILE145  DD DSN=CBT.FILE145.PDS,DISP=(MOD,DELETE),
+//            VOL=SER=TKS430,UNIT=5063,
+//            SPACE=(6144,(33,16,6))
+IEF236I ALLOC. FOR CBT145   RECYCLE
+IEF237I 100   ALLOCATED TO FILE145
+IEF142I - STEP WAS EXECUTED - COND CODE 0000
+IEF285I   CBT.FILE145.PDS                              DELETED
+IEF285I   VOL SER NOS= TKS430.
+IEF373I STEP /RECYCLE / START 23125.0259
+IEF374I STEP /RECYCLE / STOP  23125.0259 CPU   0MIN 00.01SEC STOR VIRT     64K
+//LOAD     EXEC PGM=IEBCOPY
+//SYSPRINT DD SYSOUT=A
+//I        DD DSN=FILE145.IEBCOPY,DISP=OLD,VOL=SER=CBT145,
+//            LABEL=(1,SL),UNIT=5010
+//O        DD DSN=CBT.FILE145.PDS,DISP=(NEW,CATLG),
+//            VOL=SER=TKS430,UNIT=5063,
+//            SPACE=(6144,(33,16,6))
+//SYSUT3   DD SPACE=(TRK,(5,5)),UNIT=SYSDA
+//SYSIN    DD *
+//
+IEF236I ALLOC. FOR CBT145   LOAD
+ISP612I SPOOL ALLOCATED TO SYSPRINT
+IEF237I 280   ALLOCATED TO I
+IEF237I 100   ALLOCATED TO O
+IEF237I 101   ALLOCATED TO SYSUT3
+ISP612I SPOOL ALLOCATED TO SYSIN
+
+OC EC IEBCOPY  63-10-85                          DATE 05.05.23            TIME 02.59.25                       PAGE 0001
+                      COPY INDD=I,OUTDD=O
+IEB167I  FOLLOWING MEMBER(S)  LOADED  FROM INPUT DATA SET REFERENCED BY I        -
+         GUPI          KERMIT       *KERM40        UPDCNV0
+
+IEB154I  NOTE: *) MEMBER HAS BEEN  LOADED  AND IS AN 'ALIAS'
+IEB144I  THERE ARE 0000009 UNUSED TRACKS IN OUTPUT DATA SET REFERENCED BY O
+IEB149I  THERE ARE 0000005  UNUSED DIRECTORY BLOCKS IN OUTPUT DIRECTORY
+IEB147I  END OF JOB -00 WAS HIGHEST SEVERITY CODE
+
+IEF142I - STEP WAS EXECUTED - COND CODE 0000
+ISP610I   $.0032.A.OUT                                 SYSOUT      / SPOOL
+ISP610I   VOL SER NOS= TKS430.     P=00045,S=00022,U=00001
+IEF285I   FILE145.IEBCOPY                              KEPT
+IEF285I   VOL SER NOS= CBT145.
+IEF287I   CBT.FILE145.PDS                              NOT CATLGD  2
+IEF287I   VOL SER NOS= TKS430.
+IEF285I   SYS23125.T000004.RS000.CBT145.R0000008       DELETED
+IEF285I   VOL SER NOS= SYSCPK.
+ISP610I   $.0033. .INP                                 SYSIN       / SPOOL
+ISP610I   VOL SER NOS= TKS430.     P=00010,S=00500,U=00001
+ISP610I   $.0033. .INP                                 DELETED     / SPOOL
+ISP610I   VOL SER NOS= TKS430.     P=00010,S=00500,U=00000
+IEF373I STEP /LOAD    / START 23125.0259
+IEF374I STEP /LOAD    / STOP  23125.0259 CPU   0MIN 00.04SEC STOR VIRT    128K
+IEF375I  JOB /CBT145  / START 23125.0259
+IEF376I  JOB /CBT145  / STOP  23125.0259 CPU   0MIN 00.05SEC
+</pre>
+<span class=en>An original data may be extracted either from IEBCOPY image with UNCOPY, 
+or from XMIT image using UNXMIT.</span>
+<span class=ru>Оригинальные данные могут быть извлечены либо из файла IEBCOPY 
+с помощью UNCOPY либо из файла XMIT с помощью UNXMIT.</span>
+<br>
+
+</table>
+<br>
+<span class=en>&copy; 2022-2023 Gregori Bliznets gregorytwin@gmail.com</span>
+<span class=ru>&copy; 2022-2023 Григорий Близнец gregorytwin@gmail.com</span>
+</body>
+</html>
+
+

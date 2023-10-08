@@ -1,0 +1,340 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head><title>XMITLIST - "filelist-like" XMIT file browser</title></head>
+<style>
+body {background-color:white;color:black;font-family:Verdana;}
+td.n, td.b {font-family:Verdana;font-weight:normal;font-size:12pt;}
+td.n {font-weight:normal;}
+td.b {font-weight:bold; width: 120px;}
+a.plain, a.plain:link, a.plain:hover {color:black;}
+table.screen {background-color: black; border-spacing: 0px 0px 0px 0px;
+    border-collapse: collapse;}
+table.screen tr {background-color: black; }
+table.screen tr td {display: block; unicode-bidi: embed;
+   font-family: monospace; font-size: 16px; white-space: pre;
+   padding: 0px; margin: 0px; height: 18px; }
+span.brite {background-color:lightyellow;color:black;}
+span.border {border: 1px solid black;}
+span.green, span.turq, span.white, span.blue, span.red,
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {background:black;font-style:normal;}
+span.green, span.turq, span.white, span.blue, span.red, span.yellow
+ {font-weight:normal;}
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {font-weight:bold;}
+span.turq, span.turqbold {color:turquoise;}
+span.white, span.whitebold {color:white;}
+span.green {color:green;}
+span.blue {color:deepSkyBlue;}
+span.red, span.redbold {color:red;}
+span.yellow {color:yellow;}
+span.jcl {color:black; font-weight:normal; font-style:normal; font-size:10pt;}
+span.cursor
+ {color:black; background:green; font-weight:normal; font-style:normal;}
+span.cmd, span.hrc, span.sys { font-family: Courier; font-weight: bold; white-space: nowrap;}
+span.sys { color: black; background-color: lightgrey; }
+span.cmd { color: lightgrey; background-color: black; }
+span.hrc { color: yellow; background-color: black; }
+div.sticky { position: -webkit-sticky; /* Safari */ position:sticky; float:right; top:0;}
+</style>
+<script>
+function RU() {
+  view('RU', 'block');
+  view('EN', 'none');
+}
+
+function EN() {
+  view('RU', 'none');
+  view('EN', 'block');
+}
+
+function view(lang, attr) {
+  Array.from(document.getElementsByClassName(lang)).forEach (item => { item.style.display = attr; });
+}
+
+</script>
+<body onload=EN();>
+<div class=sticky>
+<button id="EN" type="button" onclick="EN()" title="EN"><span style="font-size:14px;">EN</span>
+<button id="RU" type="button" onclick="RU()" title="RU"><span style="font-size:14px;">RU</span>
+</button>
+</div>
+
+<table>
+<tr><td class=b>
+<span class=en>Function:</span>
+<span class=ru>Функция:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<span class=en>Browse XMIT archive - browse unloaded sequuential data set as well
+as members of unloaded PDS[E]. xmitlist implemented as
+Windows console application and designed in old fashion VM/CMS FILELIST style :-)</span>
+<span class=ru>Просмотр содержимого файла XMIT. Отображается содержимое выгруженного
+последовательного набора данных либо содержимое разделов выгруженного библиотечного
+набора данных (PDS[E]). xmitlist реализован как консольное приложение Windows,
+а его внешний вид и функциональность подобны старомодному VM/CMS FILELIST :-)</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Syntax:</span><span class=ru>Формат:</span><td>&nbsp;<tr><td class=n>&nbsp;
+<tr><td class=b>&nbsp;<td class=n><span class=border>&nbsp;<b>XMITLIST</b>&nbsp;[-<b>e</b>bcdic codepage]&nbsp;[-<b>a</b>scii codepage]<i>xmitfile</i></span>
+
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Prerequested</span><span class=ru>Требования:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<ul>
+<li><span class=en>Either Open object REXX (OOREXX) or Regina REXX</span><span class=ru>Open Object REXX (OOREXX) либо Regina REXX</span>
+<li><span class=en>File extension .rex must be properly associated</span><span class=ru>Расширение имени файлов .rex должно быть правильно ассоциировано</span>
+<li><span class=en>The Hessling Editor (THE), Windows version 3.3B3 included</span><span class=ru>The Hessling Editor (THE), версия Windows 3.3B3 включена</span>
+</ul></td>
+
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Installation</span><span class=ru>Установка</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<span class=en>Special installation procedure not required. However, windows console
+session used for xmitlist need to be customized. xmitlist provide browsing
+of text data, so it is important to represent it correctly, including
+possible national characters. <b>xmitlist</b> delivered with shortcut (<b>xmitlist.lnk</b>)
+already customized for cyrillic languages. If you use different language,
+you need to change xmitlist propeties as follows:
+<ul>
+<li>specify the proper font which is represent national characters
+<li>specify correct EBCDIC and ASCII codepages (-e and -a options)
+to provide correct national characters representation. Please see
+<a href=https://docs.microsoft.com/en-us/windows/win32/intl/code-page-identifiers">this page</a>
+and choose a proper codepage for your native language. Please use THE against any file with national characters
+to be sure that ASCII console codepage is correct. 
+</ul>
+<p>Delivered shortcut defines font "Lucida Console" with 14px size, and
+do not specified -e and -a options, therefore default internal translate table
+from codepage 1025 (EBCDIC cyrillic, it is practically the same as 20880) and
+866 (Windows OEM cyrillic) are used.</p>
+<p>Anyway, path to program object and working directory specified in shortcut must be 
+changed to reflect actual location</p>
+</span>
+<span class=ru>Какая-либо специальная установка xmitlist не требуется, однако, может потребоваться настройка
+сессии консоли windows. Так как основной функцией xmitlist является просмотр данных,
+они должны корректно отображаться, включая национальные символы. xmitlist поставляется
+с ярлыком (xmitlist.lnk), который обеспечивает отображение символов кириллицы.
+Если для представления данных используется другой язык, необходимо изменить свойства
+ярлыка следующим образом:
+<ul>
+<li>указать подходящий шрифт для правильного представления национальных символов;
+<li>указать подходящие кодовые страницы EBCDIC и ASCII для правильного представления
+национальных символов. См. <a href=https://docs.microsoft.com/en-us/windows/win32/intl/code-page-identifiers">эту страницу</a>
+для выбора подходящих кодовых страниц используемого языка. Используйте THE для редактирования
+произвольного файла с национальными символами, чтобы убедиться в правильности кодовой
+страницы ASCII.
+</ul>
+<p>Поставляемый ярлык определяет шрифт "Lucida Console" размером 14px и
+не определяет режимы -e и -a, поэтому используется встроенная таблица трансляции
+из 1025 ((EBCDIC кириллица, практически совпадает с 20880) и 866 (Windows OEM кириллица).
+<p>В любом случае, путь к программному объекту и рабочая папка в ярлыке
+должны быть изменены, чтобы отразить фактическое местонахождение xmitlist.</p>
+</span>
+</td>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Usage:</span><span class=ru>Применение</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n><span class=en>Let's consider xmitlist features on example. Enter <span class=cmd>xmitlist.lnk FILE020.XMI</span>, where FILE020.XMI
+is XMIT file taken from CBTTAPE.ORG (File 20) kept on the same directory (path can
+be specified as required). The following screen appears:</span>
+<span class=ru>Рассмотрим использование xmitlist на примере конкретного файла из 
+коллекции CBTTAPE.ORG (файл 20). После выполнения <span class=cmd>xmitlist.lnk FILE020.XMI</span>, где FILE020.XMI
+файл XMIT, расположенный в тоже каталоге, что и xmitlist (может указываться путь, если это не так) появляется следующий экран:
+</span>
+<table class=screen border=0>
+<tr><td><span class=yellow><b>XMITLIST 1.0                  CBT.V486.FILE020.PDS                   FILE020.XMI</b>
+<tr><td><span class=green>&nbsp;
+<tr><td><span class=green><b>Member   TTR
+<tr><td><span class=cursor>$$$DOC   000204
+<tr><td><span class=green>APFLIST  000206                                                                 
+<tr><td><span class=green>ASCB     000208
+<tr><td><span class=green>ASCB2    00020A
+<tr><td><span class=green>BRODCAST 00020D
+<tr><td><span class=green>CARDS    000210
+<tr><td><span class=green>CAXWA    000305
+<tr><td><span class=green>DASDUCB  000308
+<tr><td><span class=green>DIRPDS   00030B
+<tr><td><span class=green>DSCB     00030E
+<tr><td><span class=green>EDTLIST  000405
+<tr><td><span class=green>EDTLOOK  00040A
+<tr><td><span class=green>GDGDEL   000502
+<tr><td><span class=green>GDGSCAN  000504
+<tr><td><span class=green>GENERIC  000506
+<tr><td><span class=green>LDSITEST 000508
+<tr><td><span class=green>LNKLIST  00050A
+<tr><td><span class=green>LST      00050D
+<tr><td><span class=green>LST#     000601
+<tr><td><span class=green>MOO      000603
+<tr><td><span class=green>RDSNALL  000606
+<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward  F10=browse  F12=cancel
+</table>
+<span class=en>On the top shown script name, it's current version, an original data set name
+and name of processed XMIT file (FILE020.XMI here). 
+<br>For a partitioned data set (PDS[E]) member list is shown, for a sequential data set
+content of the data set displayed.
+<br>You can scroll the member list with F7/F8 and PgUp/PgDown, but also can unhide command line with F2 and then 
+use any THE command - locate, find etc.
+<br>Move cursor to the first member in list (member $$$DOC) and press F10. Content of the member $$$DOC being displayed:</span>
+<span class=ru>В верхней строке отображается имя программы и ее текущая версия,
+имя оригинального набора данных и имя обрабатываемого файла.
+<br>Список можно листать с помощью F7/F8 и PgUp/PgDown, но также можно вызвать командную строку THE с помощью F2
+и затем использовать любые команды THE - locate, find etc.
+<br>Переместите курсор к первому разделу списка ($$$DOC) и нажмите F10.
+Отобразится содержимое раздела $$$DOC:</span>
+
+<table class=screen border=0>
+<tr><td><span class=yellow><b>XMITLIST 1.0              CBT.V486.FILE020.PDS($$$DOC)               FILE020.XMI</b>
+<tr><td><span class=green>
+<tr><td><span class=green>DOC FOR REXX EXECS (AND WHAT THEY NEED).
+<tr><td><span class=green>
+<tr><td><span class=green>       AUTHOR:   ANONYMOUSLY DONATED
+<tr><td><span class=green>
+<tr><td><span class=green>       CALL:     SAM GOLOB
+<tr><td><span class=green>                 SCG SERVICES INC.
+<tr><td><span class=green>                 1417 LAURELWOOD AVENUE
+<tr><td><span class=green>                 LAKEWOOD, NJ 08701-1732
+<tr><td><span class=green>                 (908) 901-0943
+<tr><td><span class=green>
+<tr><td><span class=green>   THIS IS A COLLECTION OF HANDY DANDY, QUICK N DIRTY REXX EXECS
+<tr><td><span class=green>   THAT DO SOME USEFUL THINGS.  TRY EM.  YOU (MAY) LIKE EM.
+<tr><td><span class=green>
+<tr><td><span class=green>   THERE ARE TWO ASSEMBLER ROUTINES:  UCBSUBR, RDSNALL
+<tr><td><span class=green>   THERE IS ONE TSO HELP MEMBER    :  LST#
+<tr><td><span class=green>   THERE IS ONE ASSEMBLER MACRO    :  REGS
+<tr><td><span class=green>
+<tr><td><span class=green>   PLEASE NOTE THAT SOME DISPLACEMENTS IN CONTROL BLOCKS MAY VARY
+<tr><td><span class=green>   FROM ONE RELEASE OF MVS TO ANOTHER.  IF AN EXEC DOESN'T WORK ON
+<tr><td><span class=green>   YOUR SYSTEM, THAT MAY BE SOMETHING THAT'S WORTH LOOKING INTO.
+<tr><td><span class=green>
+<tr><td><span class=green>   THERE MAY ALSO BE SOME DEPENDENCY ON THE RELEASE OF TSO/E REXX.
+<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward              F12=cancel
+</table>
+
+<span class=en>Press F3 to go back to the member list, move cursor to the second member in list (member APFLIST) and press F10. Content of the member APFLIST being displayed:</span>
+<span class=ru>Нажмите F3, чтобы вернуться к списку разделов, переместите курсор ко второму разделу списка (APFLIST) и нажмите F10. Отобразится содержимое раздела APFLIST:</span>
+<table class=screen border=0>
+<tr><td><span class=yellow><b>XMITLIST 1.0                  CBT.V486.FILE020.PDS                   FILE020.XMI</b>
+<tr><td><span class=green>&nbsp;
+<tr><td><span class=green><b>Member   TTR
+<tr><td><span class=cursor>$$$DOC   000204
+<tr><td><span class=green>APFLIST  000206                                                                 
+<tr><td><span class=green>ASCB     000208
+<tr><td><span class=green>ASCB2    00020A
+<tr><td><span class=green>BRODCAST 00020D
+<tr><td><span class=green>CARDS    000210
+<tr><td><span class=green>CAXWA    000305
+<tr><td><span class=green>DASDUCB  000308
+<tr><td><span class=green>DIRPDS   00030B
+<tr><td><span class=green>DSCB     00030E
+<tr><td><span class=green>EDTLIST  000405
+<tr><td><span class=green>EDTLOOK  00040A
+<tr><td><span class=green>GDGDEL   000502
+<tr><td><span class=green>GDGSCAN  000504
+<tr><td><span class=green>GENERIC  000506
+<tr><td><span class=green>LDSITEST 000508
+<tr><td><span class=green>LNKLIST  00050A
+<tr><td><span class=green>LST      00050D
+<tr><td><span class=green>LST#     000601
+<tr><td><span class=green>MOO      000603
+<tr><td><span class=green>RDSNALL  000606
+<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward  F10=browse  F12=cancel
+</table>
+<br>
+<table class=screen border=0>
+<tr><td><span class=yellow><b>XMITLIST 1.0             CBT.V486.FILE020.PDS(APFLIST)               FILE020.XMI</b>
+<tr><td><span class=green>
+<tr><td><span class=green>/******************************  REXX  *******************************/
+<tr><td><span class=green>/*     THIS REXX PROGRAM LISTS ALL THE APF LIBRARIES BY BROWSING     */
+<tr><td><span class=green>/*     THE AUTHORIZED LIBRARY TABLE AT OFFSET 484 IN THE CVT.        */
+<tr><td><span class=green>/*     THE LAYOUT IS: NUMBER OF ENTRIES    2                         */
+<tr><td><span class=green>/*                    LEN OF ENTRY         1        )   TIMES        */
+<tr><td><span class=green>/*                    VOLUME               6        )   NUMBER       */
+<tr><td><span class=green>/*                    DSN                  VARIABLE )   OF ENTRIES   */
+<tr><td><span class=green>/*********************************************************************/
+<tr><td><span class=green>ARG     NAME
+<tr><td><span class=green>CLEAR                                        /* CLEAR SCREEN        */
+<tr><td><span class=green>CVT     = STORAGE(10,4)                      /* DECIMAL 16 ==> CVT  */
+<tr><td><span class=green>CCVT    = C2X(CVT)                           /* CHAR CVT ADDRESS    */
+<tr><td><span class=green>DCVT    = C2D(CVT)                           /* DECIMAL CVT ADDR    */
+<tr><td><span class=green>DAUTH   = DCVT + 484                         /* DECIMAL AUTH ADDR   */
+<tr><td><span class=green>AUTH    = D2C(DAUTH,4)                       /* AUTH TAB ADDRESS    */
+<tr><td><span class=green>CAUTH   = C2X(AUTH)                          /* CHAR AUTH TAB ADDR  */
+<tr><td><span class=green>ADDR1   = STORAGE(CAUTH,4)                   /* ADDRESS OF AUTH TAB */
+<tr><td><span class=green>CADDR1  = C2X(ADDR1)                         /* CHAR ADDR OF AUTH   */
+<tr><td><span class=green>DATA    = STORAGE(CADDR1,2)                  /* GET LUMP OF DATA    */
+<tr><td><span class=green>NUMENT  = SUBSTR(DATA,1,2)                   /* NUMBER OF ENTRIES   */
+<tr><td><span class=green>DNUMENT = C2D(NUMENT)                        /* CONVERT TO DECIMAL  */
+<tr><td><span class=green>LEN     = (DNUMENT * 51) + 2                 /* MAX STORAGE POSS    */
+<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward              F12=cancel
+</table>
+
+<span class=en>let's consider CBTTAPE file 18 (CBT.CBT466.FILE018.DATA) now.
+After command</span>
+<span class=ru>теперь рассмотрим файл 18 CBTTAPE.ORG (CBT.CBT466.FILE018.DATA). 
+После команды</span> 
+<span class=cmd>xmitlist.lnk CBT.CBT466.FILE018.DATA</span>
+<span class=en>we'll see content of the data set, because the data set is sequential</span>
+<span class=ru>отображается содержимое набора данных, так как этот набор данных последовательный</span>
+
+<table class=screen border=0>
+<tr><td><span class=yellow>XMITLIST 1.0                CBT.CBT466.FILE018.DATA           CBT466.FILE018.XMI
+<tr><td><span class=green>
+<tr><td><span class=green>1
+<tr><td><span class=green>0***** - TSUPDATE - ***** A TECHNICAL SERVICES UTILITY PROGRAM ***** R E V I S I
+<tr><td><span class=green>0*******************************************************************************
+<tr><td><span class=green> ***** - THIS UTILITY WAS DEVELOPED BY CONSOLIDATED RAIL CORPORATION (CONRAIL) A
+<tr><td><span class=green> **** THE SOURCE CODE CAN NOT BE RELEASED WITHOUT THE EXPRESSED WRITTEN CONSENT
+<tr><td><span class=green> **** HOWEVER THE EXECUTION AND USE OF THE UTILITY BY THE GENERAL USER COMMUNITY
+<tr><td><span class=green> **** USER PROBLEMS, QUESTIONS OR SUGGESTIONS CAN BE REPORTED TO CONRAIL VIA THE
+<tr><td><span class=green>********************************************************************************
+<tr><td><span class=green> *   C O N R A I L DOES NOT MAKE ANY GUARANTEES,  EXPRESSED OR IMPLIED.
+<tr><td><span class=green> * THAT T S U P D A T E WILL NOT CAUSE PROBLEMS IN THE USERS INSTALLATION
+<tr><td><span class=green>********************************************************************************
+<tr><td><span class=green> *******************************************************************************
+<tr><td><span class=green> *PROCESSING NOTE: TSUPDATE USER DOCUMENTATION CAN NOW BE PRINTED FROM TSUPDATE
+<tr><td><span class=green> *BY USING INIT CONTROL CARDS,WHICH CAN BE INTERMIXED WITH CHANGE CONTROL CARDS.
+<tr><td><span class=green> *STARTING IN COL ONE(INIT OPTION=DOCUMENT).        THE INIT STATEMENT MAY ALSO
+<tr><td><span class=green> *******************************************************************************
+<tr><td><span class=green> *******************************************************************************
+<tr><td><span class=green> *                                       TSUPDATE PARM FIELD PROCESSING OPTIONS
+<tr><td><span class=green> *                                       1.PDS PROCESSING OPTION SELECTED
+<tr><td><span class=green> *                                       2.NODETAIL PROCESSING OPTION SELECTED
+<tr><td><span class=green> *                                       3.CHECKPOINT FULL  PROCESSING OPTION SE
+<tr><td><span class=green> *                                       4.  NUM PROCESSING OPTION SELECTED
+<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward              F12=cancel
+</table>
+<br>
+<span class=en>As well as F10, there are available Alt+F10 - extract current member to the file in text mode 
+(i.e. converted to ASCII) and Ctrl+F10 - extract current member to the file in binary mode (i.e. in EBCDIC).</span>
+<span class=ru>Наряду с F10 в списке разделов поддерживаются Alt+F10 - извлечение текущего раздела в файл
+в текстовом режиме (т.е. перекодированного в ASCII) и Ctrl+F10 - извлечение текущего раздела в файл в двоичном режиме 
+(т.е. в EBCDIC, без перекодировки)</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Notes</span><span class=ru>Примечания</span><td>&nbsp;<td>&nbsp;
+<tr><td class=b>&nbsp;<td class=n>
+<ul>
+<li><span class=en>Procedure kept on the current directory all browsed files and directories
+as well as member list.</span>
+<span class=ru>Процедура не удаляет файлы, появившиеся в результате просмотра.</span>
+<li><span class=en>Procedure may be considered as XMITMGR alternative.
+<br>Advantages: XMITLIST works on any system, where OOREXX and THE 3.3 available;
+<br>XMITLIST is true open source, you can adopt it as you want.
+<br>Disadvantages: you need OOREXX and THE unlike XMITMSG which is standalone (not 100% true - runtime required anyway).</span>
+<span class=ru>Процедура может рассматриваться как альтернатива XMITMGR.
+<br>Преимущества: XMITLIST может функционировать в любой версии Windows, и вообще на
+любой платформе, где доступен OOREXX и THE 3.3 и выше;
+<br>В отличие от XMITMGR, у XMITLIST открыт исходный код, и скрипт можно модифицировать
+в соотвестствии с Вашими потребностями, я лишь прошу сохранить copyright.
+<br>Недостатки: XMITLIST требует OOREXX и THE, в то время как XMITMGR полностью автономен (ну не совсем, там runtime тоже требуется на самом деле).</span>
+<li><span class=en>Why filelist (fulltext) style? Because I said so :) I believe, form must match the content.</span>
+<span class=ru>Почему в стиле filelist? Потому, что я так захотел :) Я всегда считал, что форма
+должна соответстовать содержанию.<span>
+<li><span class=en>If you like this program, give me feedback). Also, you can donate
+few cents for a feed for my seven cats).</span>
+<span class=ru>Если Вы нашли эту программу полезной и хотели бы выразить мне благодарность,
+просто напишите письмо). Впрочем, можете также пожертвовать любую сумму на корм и расходы для моих семи котов).</span>
+</ul>
+</table>
+
+<span class=en>&copy; 2022-2023 Gregori Bliznets gregorytwin@gmail.com</span>
+<span class=ru>&copy; 2022-2023 Григорий Близнец gregorytwin@gmail.com</span>
+</body>
+</html>

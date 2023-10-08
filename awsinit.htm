@@ -1,0 +1,128 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head><title>AWSINIT - initialize AWS tape image</title></head>
+<style>
+body {background-color:white;color:black;font-family:Verdana;}
+td.n, td.b {font-family:Verdana;font-weight:normal;font-size:12pt;}
+td.n {font-weight:normal;}
+td.b {font-weight:bold; width: 120px;}
+a.plain, a.plain:link, a.plain:hover {color:black;}
+table.screen {background-color: black; border-spacing: 0px 0px 0px 0px;
+    border-collapse: collapse;}
+table.screen tr {background-color: black; }
+table.screen tr td {display: block; unicode-bidi: embed;
+   font-family: monospace; font-size: 16px; white-space: pre;
+   padding: 0px; margin: 0px; height: 18px; }
+span.brite {background-color:lightyellow;color:black;}
+span.border {border: 1px solid black;}
+span.green, span.turq, span.white, span.blue, span.red,
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {background:black;font-style:normal;}
+span.green, span.turq, span.white, span.blue, span.red, span.yellow
+ {font-weight:normal;}
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {font-weight:bold;}
+span.turq, span.turqbold {color:turquoise;}
+span.white, span.whitebold {color:white;}
+span.green {color:green;}
+span.blue {color:deepSkyBlue;}
+span.red, span.redbold {color:red;}
+span.yellow {color:yellow;}
+span.jcl {color:black; font-weight:normal; font-style:normal; font-size:10pt;}
+span.cursor
+ {color:black; background:green; font-weight:normal; font-style:normal;}
+span.cmd, span.hrc, span.sys { font-family: Courier; font-weight: bold; white-space: nowrap;}
+span.sys { color: black; background-color: lightgrey; }
+span.cmd { color: lightgrey; background-color: black; }
+span.hrc { color: yellow; background-color: black; }
+div.sticky { position: -webkit-sticky; /* Safari */ position:sticky; float:right; top:0;}
+</style>
+<script>
+function RU() {
+  view('RU', 'block');
+  view('EN', 'none');
+}
+
+function EN() {
+  view('RU', 'none');
+  view('EN', 'block');
+}
+
+function view(lang, attr) {
+  Array.from(document.getElementsByClassName(lang)).forEach (item => { item.style.display = attr; });
+}
+
+</script>
+<body onload=EN();>
+<div class=sticky>
+<button id="EN" type="button" onclick="EN()" title="EN"><span style="font-size:14px;">EN</span>
+<button id="RU" type="button" onclick="RU()" title="RU"><span style="font-size:14px;">RU</span>
+</button>
+</div>
+
+<table>
+<tr><td class=b>
+<span class=en>Function:</span>
+<span class=ru>Функция:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<span class=en>Initialize AWS tape image.</span>
+<span class=ru>Инициализация ленты AWS.</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Syntax:</span><span class=ru>Формат:</span><td>&nbsp;<tr><td class=n>&nbsp;
+<tr><td class=b>&nbsp;<td class=n><span class=border>&nbsp;<b>AWSINIT</b>&nbsp;[<i>options</i>] <i>awstape</i> <i>volser</i> [<i>owner</i>]</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Options:</span><span class=ru>Режимы:</span><td>&nbsp;
+<tr><td class=b>&nbsp;<td class=n>-<b><u>SL</u></b> | -<b>NL</b>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Prerequested</span><span class=ru>Требования:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<ul>
+<li><span class=en>Either Open object REXX (OOREXX) or Regina REXX</span><span class=ru>Open Object REXX (OOREXX) либо Regina REXX</span>
+<li><span class=en>File extension .rex must be properly associated</span><span class=ru>Расширение имени файлов .rex должно быть правильно ассоциировано</span>
+</ul></td>
+
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Installation</span><span class=ru>Установка</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<span class=en>Installation procedure not required.</span>
+<span class=ru>Какая-либо специальная установка не требуется.</span>
+</td>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Usage:</span><span class=ru>Применение</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<ol>
+<li><span class=en>Procedure AWSINIT do principally the same as z/OS IEHINITT does.
+By default, or if -SL option specified, 2 parameters required: name of AWS tape image <i>awstape</i>,
+volume serial <i>volser</i>. 3rd parameter <i>owner</i> is optional. 
+<br>If option -NL specified, single parameter <i>awsfile</i> required.</span>
+<span class=ru>Функции процедура AWSINIT в принципе соответствует функции программы
+IEHINITT z/OS. По умолчанию и при явном указании параметра -SL требуется два параметра:
+имя образа ленты AWS <i>awstape</i> и серийный номер тома <i>volser</i>. В этом случае
+может указываться необязательный 3ий пармаметр <i>owner</i>.
+<br>Если указывается режим -NL, требуется только один параметр <i>awsfile</i>.</span>
+<br>
+<li><span class=en>When option -SL in effect, AWSINIT write to AWS tape
+standard volume label VOL1, dummy label HDR1 and tape mark, the same as
+IEHINITT does.</span>
+<span class=ru>Если действует режим -SL, AWSINIT записывает на ленту AWS
+стандартную метку тома VOL1, фиктивную метку HDR1 и ленточную марку, т.е.
+точно то же самое, что делает IEHINITT.</span>
+<br>
+<li><span class=en>When option -NL in effect, AWSINIT write to AWS tape
+single tape mark.</span>
+<span class=ru>Если действует режим -NL, AWSINIT записывает на ленту AWS одну ленточную
+марку.</span>
+<br>
+<li><span class=en><b>Warning: any content of existing AWS tape would be 
+completely destroyed by AWSINIT.</b></span>
+<span class=ru><b>Предупреждение: предыдущее содержимое ленты AWS после 
+применения AWSINIT полностью уничтожается.</span>
+</span>
+</ol>
+</ul>
+</table>
+
+<span class=en>&copy; 2022-2023 Gregori Bliznets gregorytwin@gmail.com</span>
+<span class=ru>&copy; 2022-2023 Григорий Близнец gregorytwin@gmail.com</span>
+</body>
+</html>

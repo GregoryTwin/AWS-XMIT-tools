@@ -1,0 +1,190 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head><title>AWSDUMP - write files to AWS tape image</title></head>
+<style>
+body {background-color:white;color:black;font-family:Verdana;}
+td.n, td.b {font-family:Verdana;font-weight:normal;font-size:12pt;}
+td.n {font-weight:normal;}
+td.b {font-weight:bold; width: 120px;}
+a.plain, a.plain:link, a.plain:hover {color:black;}
+table.screen {background-color: black; border-spacing: 0px 0px 0px 0px;
+    border-collapse: collapse;}
+table.screen tr {background-color: black; }
+table.screen tr td {display: block; unicode-bidi: embed;
+   font-family: monospace; font-size: 16px; white-space: pre;
+   padding: 0px; margin: 0px; height: 18px; }
+span.brite {background-color:lightyellow; color:black;}
+span.border {border: 1px solid black;}
+span.green, span.turq, span.white, span.blue, span.red,
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {background:black;font-style:normal;}
+span.green, span.turq, span.white, span.blue, span.red, span.yellow
+ {font-weight:normal;}
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {font-weight:bold;}
+span.turq, span.turqbold {color:turquoise;}
+span.white, span.whitebold {color:white;}
+span.green {color:green;}
+span.blue {color:deepSkyBlue;}
+span.red, span.redbold {color:red;}
+span.yellow {color:yellow;}
+span.jcl {color:black; font-weight:normal; font-style:normal; font-size:10pt;}
+span.cursor
+ {color:black; background:green; font-weight:normal; font-style:normal;}
+span.cmd, span.hrc, span.sys { font-family: Courier; font-weight: bold; white-space: nowrap;}
+span.sys { color: black; background-color: lightgrey; }
+span.cmd { color: lightgrey; background-color: black; }
+span.hrc { color: yellow; background-color: black; }
+div.sticky { position: -webkit-sticky; /* Safari */ position:sticky; float:right; top:0;}
+</style>
+<script>
+function RU() {
+  view('RU', 'block');
+  view('EN', 'none');
+}
+
+function EN() {
+  view('RU', 'none');
+  view('EN', 'block');
+}
+
+function view(lang, attr) {
+  Array.from(document.getElementsByClassName(lang)).forEach (item => { item.style.display = attr; });
+}
+
+</script>
+<body onload=EN();>
+<div class=sticky>
+<button id="EN" type="button" onclick="EN()" title="EN"><span style="font-size:14px;">EN</span>
+<button id="RU" type="button" onclick="RU()" title="RU"><span style="font-size:14px;">RU</span>
+</button>
+</div>
+
+<table>
+<tr><td class=b>
+<span class=en>Function:</span>
+<span class=ru>Функция:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<span class=en>Write file to AWS tape.</span>
+<span class=ru>Запись файла на ленту AWS.</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Syntax:</span><span class=ru>Формат:</span><td>&nbsp;<tr><td class=n>&nbsp;
+<tr><td class=b>&nbsp;<td class=n><span class=border>&nbsp;<b>AWSDUMP</b>&nbsp;[<i>options</i>] <i>file</i> <i>awstape</i> <i>n</i> <i>recfm</i> <i>lrecl</i> [<i>blksize</i>]&nbsp;</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Options:</span><span class=ru>Режимы:</span><td>&nbsp;
+<tr><td class=b>&nbsp;<td class=n>-<b>b</b>inary | <u>-<b>t</b>ext</u>
+<br>-<b>e</b>bcdic <i>codepage</i>
+<br>-<b>a</b>scii <i>codepage</i>
+<br>-<b>blp</b>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Prerequested</span><span class=ru>Требования:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<ul>
+<li><span class=en>Either Open object REXX (OOREXX) or Regina REXX</span><span class=ru>Open Object REXX (OOREXX) либо Regina REXX</span>
+<li><span class=en>File extension .rex must be properly associated</span><span class=ru>Расширение имени файлов .rex должно быть правильно ассоциировано</span>
+</ul></td>
+
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Installation</span><span class=ru>Установка</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<span class=en>Installation procedure not required.</span>
+<span class=ru>Какая-либо специальная установка не требуется.</span>
+</td>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Usage:</span><span class=ru>Применение</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<ol>
+<li><span class=en>Procedure AWSDUMP has 6 mandatory parameters:
+<br>- the 1st <i>file</i> is a disk file being written
+<br>- the 2nd <i>awstape</i> - AWS tape image
+<br>- the 3rd <i>n</i> - sequential data set number on tape
+<br>- the 4th - record format (RECFM) of tape data set {F[B] | V[B][S] | U }
+<br>- the 5th - logical record length (LRECL) of tape data set
+<br>- the 6th - block length (BLKSIZE) of tape data set
+<br>For non-blocked record (RECFM {F | V | U) 6th parameter not required.
+</span>
+<span class=ru>Процедура AWSDUMP имеет 5 обязательных параметров:
+<br>- 1ый <i>file</i> имя файла, который следует записать на ленту
+<br>- 2ой <i>awstape</i> - имя образа ленты AWS
+<br>- 3ий <i>n</i> - порядковый номер набора данных на ленте
+<br>- 4ый - формат записи (RECFM) набора данных ленты {F[B] | V[B][S] | U }
+<br>- 5ый - логическая длина записи (LRECL) набора данных ленты
+<br>- 6ой - длина блока (BLKSIZE) набора данных ленты
+<br>Для неблокированных записей (RECFM {F | V | U) 6ой параметр может опускаться.
+</span>
+<br>
+<li><span class=en>If AWS tape image already exists, AWSDUMP check if tape has 
+standard labels (SL) or not (NL). If AWS tape file does not exists, NL assumed.
+</span>
+<span class=ru>Если файл с образом ленты AWS уже существовал перед выполнением
+процедуры AWSDUMP, лента анализируется на предмет наличия стандартных меток (SL).
+Если файл не существует, подразумевается лента без меток (NL).</span>
+<br>
+<li><span class=en>For standard labelled (SL) tape sequential data set number is
+logical, unless option -blp specified. If tape has standard
+labels, header and trailer labels automatically created. If tape unlabelled or 
+-blp is in effect, tape sequential data set number is physical and no header/trailer
+labels written.</span>
+<span class=ru>Для ленты со 
+стандартными метками (SL) порядковый номер набора данных на ленте является
+логическим, если только не указан режим -blp. Начальные и конечные метки 
+для ленты SL набора данных записываются автоматически. Для лент без
+меток (NL) и при указании режима -blp порядковый номер набора данных на ленте является
+физическим и никакие метки не записываются.</span>
+<br>
+<li><span class=en>If option -text specified (this is the default
+option), file would be read using record mode, translated from ASCII to EBCDIC.
+The options -ascii and -ebcdic
+may be used to specify a particular code pages for translation. If both -ascii and -ebcdic
+are missed, an internal translation table is used. This internal table specified
+1025 to 1251 translation.</span>
+<span class=ru>Если указан режим -text (этот режим активен по уолчанию), 
+данные файла читаются в режиме записей и транслируются из кода ASCII в код EBCDIC. Режимы -ascii и -ebcdic
+могут использоваться чтобы определить, какие именно кодовые таблицы используются при
+перекодировке. Если режимы -ascii и -ebcdic не указаны, используется внутренная
+таблица перекодировки, которая определяет перекодировку из 1025 в 1251.</span>
+<br>
+<li><span class=en>If option -binary specified, file would be read in character mode 
+and do not translated. In case of recfm f or recfm u file data splitted by lrecl,
+In case of recfm v assumed that data contains correct RDW.</span>
+<span class=ru>Если указан режим -binary, данные файла читаются в символьном режиме
+и остаются неизменными. В случае recfm f и recfm u данные записываются на
+ленту порциями длиной lrecl. В случае recfm v предполагается, что данные содержат
+RDW.</span>
+</span>
+<br>
+<li><span class=en><b>Warning: any content of existing AWS tape after written data set
+would be completely destroyed.</b></span>
+<span class=ru><b>Предупреждение: предыдущее содержимое ленты AWS находящееся после 
+записанного набора данных полностью уничтожается.</span>
+</span>
+</ol>
+</ul>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Example</span><span class=ru>Пример</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<span class=cmd>AWSINIT tape.aws 123456</span>
+<br><span class=cmd>AWSDUMP tape.aws install.jcl  1 F 80</span>
+<br><span class=cmd>AWSDUMP tape.aws install.data 2 F 80</span>
+<br><span class=cmd>AWSDUMP tape.aws install.doc 3 F 129</span>
+<span class=en>Result of the commands above would be a standard labelled tape 
+123456 with 3 logical data set (9 physical data sets).</span>
+<span class=ru>В результате выполнения приведенной последовательности команд
+будет записана лента со стандартными метками 123456 с 3 логическими наборами
+данных (9 физических наборов данных).</span>
+<br><span class=cmd>AWSDUMP tape.aws install.data 2 F 80</span>
+<span class=en>Now tape would contain 2 logical data sets, 3rd data set lost.</span>
+<span class=ru>Теперь лента содержит только 2 логических набора данных,
+третий набор данных безвозвратно утерян.</span>
+<br><span class=cmd>AWSDUMP tape.aws install.data 4 F 80</span>
+<br>
+<span class=en>Error message "035T Premature end of tape" appears, because tape contains just 2 logical data sets.</span>
+<span class=ru>Выдается сообщение об ошибке "035T Premature end of tape", так как лента содержит только 2 логических набора данных.</span>
+<br>
+</td>
+</table>
+
+<span class=en>&copy; 2022-2023 Gregori Bliznets gregorytwin@gmail.com</span>
+<span class=ru>&copy; 2022-2023 Григорий Близнец gregorytwin@gmail.com</span>
+</body>
+</html>

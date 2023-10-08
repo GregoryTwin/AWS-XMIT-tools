@@ -1,0 +1,432 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head><title>AWS & XMIT processing tools</title></head>
+<style>
+body {background-color:white;color:black;font-family:Verdana;}
+td.n, td.b {font-family:Verdana;font-weight:normal;font-size:12pt;}
+td.n {font-weight:normal;}
+td.b {font-weight:bold; width: 120px;}
+a.plain, a.plain:link, a.plain:hover {color:black;}
+table.screen {background-color: black; border-spacing: 0px 0px 0px 0px;
+    border-collapse: collapse;}
+table.screen tr {background-color: black; }
+table.screen tr td {display: block; unicode-bidi: embed;
+   font-family: monospace; font-size: 16px; white-space: pre;
+   padding: 0px; margin: 0px; height: 18px; }
+span.brite {background-color:lightyellow;color:black;}
+span.border {border: 1px solid black;}
+span.green, span.turq, span.white, span.blue, span.red,
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {background:black;font-style:normal;}
+span.green, span.turq, span.white, span.blue, span.red, span.yellow
+ {font-weight:normal;}
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {font-weight:bold;}
+span.turq, span.turqbold {color:turquoise;}
+span.white, span.whitebold {color:white;}
+span.green {color:green;}
+span.blue {color:#08FF08;}
+span.red, span.redbold {color:red;}
+span.yellow {color:yellow;}
+span.jcl {color:black; font-weight:normal; font-style:normal; font-size:10pt;}
+span.cursor
+ {color:black; background:green; font-weight:normal; font-style:normal;}
+span.cmd, span.hrc, span.sys { font-family: Courier; font-weight: bold; white-space: nowrap;}
+span.sys { color: black; background-color: lightgrey; }
+span.cmd { color: lightgrey; background-color: black; }
+span.hrc { color: yellow; background-color: black; }
+div.sticky { position: -webkit-sticky; /* Safari */ position:sticky; float:right; top:0;}
+a { text-decoration:none; font-weight:bold; font-style:normal; color:black; }
+</style>
+<script>
+
+function RU() {
+  view('RU', 'block');
+  view('EN', 'none');
+  LANG = 'RU';
+}
+
+function EN() {
+  view('RU', 'none');
+  view('EN', 'block');
+  LANG = 'EN';
+}
+
+function view(lang, attr) {
+  Array.from(document.getElementsByClassName(lang)).forEach (item => { item.style.display = attr; });
+}
+
+function setup(x) {
+  if (x == 1 ) {
+    screen = ''
+    screen += '<table class=screen border=0>'
+    screen += '<tr><td><span class=yellow>AWSLIST 1.3                  JESSY.aws.map                          SL,JGTAPE'
+    screen += '<tr><td><span class=green>&nbsp;'
+    screen += '<tr><td><span class=blue> File Blocks Name              Recfm Lrecl Blksize Created    Content'
+    screen += '<tr><td><span class=cursor>    1    119 INSTALL           F     00080   00080 13.05.1985 RDR            '
+    screen += '<tr><td><span class=green>    2     87 JESSY.INSTALL     FB    00080   00800 13.05.1985 IEHMOVE'
+    screen += '<tr><td><span class=green>    3     69 JESSY.LINK        VS    03641   03645 00.01.3000 IEBCOPY'
+    screen += '<tr><td><span class=green>    4     19 JESSY.PROC        VS    00816   00820 00.01.3000 IEBCOPY'
+    screen += '<tr><td><span class=green>    5     37 JESSY.ARX         VS    00896   00900 00.01.3000 IEBCOPY'
+    screen += '<tr><td><span class=green>    6    208 JESSY.HELP        VS    00896   00900 00.01.3000 IEBCOPY'
+    screen += '<tr><td><span class=green>    7    211 JESSY.HLINK.D5050 F     03584   03584 13.05.1985'
+    screen += '<tr><td><span class=green>    8    102 JESSY.HLINK.D5061 F     07168   07168 13.05.1985'
+    screen += '<tr><td><span class=green>    9     58 JESSY.HLINK.D5066 F     12928   12928 13.05.1985'
+    screen += '<tr><td><span class=green>   10    199 JESSY.IALL        FBA   00133   03990 00.01.3000 WTR'
+    screen += '<tr><td><span class=green>   11    102 JESSY.ISYS        FBA   00133   03990 00.01.3000 WTR'
+    screen += '<tr><td><span class=green>   12     27 JESSY.IREST       FBA   00133   03990 00.01.3000 WTR'
+    screen += '<tr><td><span class=green>   13     41 JESSY.ISTUD       FBA   00133   03990 00.01.3000 WTR'
+    screen += '<tr><td><span class=green>   14     31 LIB4.TERMTEXT     VS    03536   03540 00.01.3000 IEBCOPY'
+    screen += '<tr><td><span class=green>   15     27 LIB4.TERMEDIT     VS    07310   07314 00.01.3000 IEBCOPY'
+    screen += '<tr><td><span class=green>   16    249 JESSY.INSTR       VS    04096   04100 00.01.3000 IEBCOPY'
+    screen += '<tr><td><span class=green>   17     69 JESSY.LINK.SVS    VS    03641   03645 00.01.3000 IEBCOPY'
+    screen += '<tr><td><span class=green>   18     95 WTR7934           VS    00416   00420 00.01.3000 IEBCOPY'
+    screen += '<tr><td><span class=green>   19      6 JESSY.RDRZ        VS    03641   03645 00.01.3000 IEBCOPY'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward  F10=browse  F12=cancel'
+    screen += '</table>'
+    screens[0] = screen
+    screen = ''
+    screen += '<table class=screen border=0>'
+    screen += '<tr><td><span class=yellow>AWSLIST 1.3                  INSTALL.data                           SL,JGTAPE'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=cursor>//INSTALL JOB MSGLEVEL=(1,1)                                                 '
+    screen += '<tr><td><span class=green>//PRT  EXEC PGM=IEBGENER'
+    screen += '<tr><td><span class=green>//SYSPRINT DD DUMMY'
+    screen += '<tr><td><span class=green>//SYSIN    DD DUMMY'
+    screen += '<tr><td><span class=green>//SYSUT2   DD SYSOUT=A,DCB=(BLKSIZE=800,LRECL=80,RECFM=FB)'
+    screen += '<tr><td><span class=green>//SYSUT1   DD *'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=green>            J E S S Y   D I S T R I B U T E   T A P E   C O N T E N T'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=green>     SEQNO      DATA SET        TYPE         NOTE       '
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=green>       1     INSTALL            GENER   THIS TEXT'
+    screen += '<tr><td><span class=green>       2     JESSY.INSTALL      MOVE    JOB LIBRARY FOR INSTALL JESSY'
+    screen += '<tr><td><span class=green>       3     JESSY.LINK         COPY    LOAD LIBRARY (MVT, MFT)'
+    screen += '<tr><td><span class=green>       4     JESSY.PROC         COPY    PROCEDURE LIBRARY TO COPY'
+    screen += '<tr><td><span class=green>                                        TO SYSTEM PROCLIB'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward              F12=cancel'
+    screen += '</table>'
+    screens[1] = screen
+    screen = ''
+  screen += '<table class=screen border=0>'
+  screen += '<tr><td><span class=yellow>AWSLIST 1.3                  JESSY.aws.map                          SL,JGTAPE'
+  screen += '<tr><td><span class=green>&nbsp;'
+  screen += '<tr><td><span class=blue> File Blocks Name              Recfm Lrecl Blksize Created    Content'
+  screen += '<tr><td><span class=green>    1    119 INSTALL           F     00080   00080 13.05.1985 RDR'
+  screen += '<tr><td><span class=cursor>    2     87 JESSY.INSTALL     FB    00080   00800 13.05.1985 IEHMOVE         '
+  screen += '<tr><td><span class=green>    3     69 JESSY.LINK        VS    03641   03645 00.01.3000 IEBCOPY'
+  screen += '<tr><td><span class=green>    4     19 JESSY.PROC        VS    00816   00820 00.01.3000 IEBCOPY'
+  screen += '<tr><td><span class=green>    5     37 JESSY.ARX         VS    00896   00900 00.01.3000 IEBCOPY'
+  screen += '<tr><td><span class=green>    6    208 JESSY.HELP        VS    00896   00900 00.01.3000 IEBCOPY'
+  screen += '<tr><td><span class=green>    7    211 JESSY.HLINK.D5050 F     03584   03584 13.05.1985'
+  screen += '<tr><td><span class=green>    8    102 JESSY.HLINK.D5061 F     07168   07168 13.05.1985'
+  screen += '<tr><td><span class=green>    9     58 JESSY.HLINK.D5066 F     12928   12928 13.05.1985'
+  screen += '<tr><td><span class=green>   10    199 JESSY.IALL        FBA   00133   03990 00.01.3000 WTR'
+  screen += '<tr><td><span class=green>   11    102 JESSY.ISYS        FBA   00133   03990 00.01.3000 WTR'
+  screen += '<tr><td><span class=green>   12     27 JESSY.IREST       FBA   00133   03990 00.01.3000 WTR'
+  screen += '<tr><td><span class=green>   13     41 JESSY.ISTUD       FBA   00133   03990 00.01.3000 WTR'
+  screen += '<tr><td><span class=green>   14     31 LIB4.TERMTEXT     VS    03536   03540 00.01.3000 IEBCOPY'
+  screen += '<tr><td><span class=green>   15     27 LIB4.TERMEDIT     VS    07310   07314 00.01.3000 IEBCOPY'
+  screen += '<tr><td><span class=green>   16    249 JESSY.INSTR       VS    04096   04100 00.01.3000 IEBCOPY'
+  screen += '<tr><td><span class=green>   17     69 JESSY.LINK.SVS    VS    03641   03645 00.01.3000 IEBCOPY'
+  screen += '<tr><td><span class=green>   18     95 WTR7934           VS    00416   00420 00.01.3000 IEBCOPY'
+  screen += '<tr><td><span class=green>   19      6 JESSY.RDRZ        VS    03641   03645 00.01.3000 IEBCOPY'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward  F10=browse  F12=cancel'
+  screen += '</table>'
+  screens[2] = screen
+  screen = ''
+  screen += '<table class=screen border=0>'
+  screen += '<tr><td><span class=yellow>AWSLIST 1.3               JESSY.INSTALL.directory                    SL,JGTAPE '
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=blue>Member   TTR'
+  screen += '<tr><td><span class=cursor>COPYPROC 000000                                                                '
+  screen += '<tr><td><span class=green>INSTALL  000302'
+  screen += '<tr><td><span class=green>MVT5050  000803'
+  screen += '<tr><td><span class=green>MVT5061  000406'
+  screen += '<tr><td><span class=green>MVT5066  00030D'
+  screen += '<tr><td><span class=green>PRTINSTR 000502'
+  screen += '<tr><td><span class=green>SERVLOC  000706'
+  screen += '<tr><td><span class=green>SVS5050  00020F'
+  screen += '<tr><td><span class=green>SVS5061  000704'
+  screen += '<tr><td><span class=green>SVS5066  000608'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward  F10=browse  F12=cancel'
+  screen += '</table>'
+  screens[3] = screen
+  screen = ''
+  screen += '<table class=screen border=0>'
+  screen += '<tr><td><span class=yellow>AWSLIST 1.3               JESSY.INSTALL(COPYPROC).data               SL,JGTAPE'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=cursor>//COPYPROC JOB MSGLEVEL=(1,1),REGION=128K                                     '
+  screen += '<tr><td><span class=green>//COPY EXEC PGM=IEBCOPY'
+  screen += '<tr><td><span class=green>//SYSPRINT DD SYSOUT=A'
+  screen += '<tr><td><span class=green>//SYSUT3   DD SPACE=(TRK,(20,20)),UNIT=SYSDA'
+  screen += '<tr><td><span class=green>//SYSUT4   DD SPACE=(TRK,(20,20)),UNIT=SYSDA'
+  screen += '<tr><td><span class=green>//JPROC    DD DSN=JESSY.PROC,DISP=SHR'
+  screen += '<tr><td><span class=green>//PROC     DD DSN=SYS1.PROCLIB,DISP=SHR'
+  screen += '<tr><td><span class=green>//SYSIN    DD *'
+  screen += '<tr><td><span class=green> COPY INDD=((JPROC,R)),OUTDD=PROC'
+  screen += '<tr><td><span class=green>//'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+  screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward              F12=cancel'
+    screen += '</table>'
+    screens[4] = screen
+    }
+  if (x == 2) {
+    screen = ''
+    screen += '<table class=screen border=0>'
+    screen += '<tr><td><span class=yellow>XMITLIST 1.0                  CBT.V486.FILE020.PDS                   FILE020.XMI'
+    screen += '<tr><td><span class=green>&nbsp;'
+    screen += '<tr><td><span class=blue>Member   TTR'
+    screen += '<tr><td><span class=cursor>$$$DOC   000204'
+    screen += '<tr><td><span class=green>APFLIST  000206'                                                                 
+    screen += '<tr><td><span class=green>ASCB     000208'
+    screen += '<tr><td><span class=green>ASCB2    00020A'
+    screen += '<tr><td><span class=green>BRODCAST 00020D'
+    screen += '<tr><td><span class=green>CARDS    000210'
+    screen += '<tr><td><span class=green>CAXWA    000305'
+    screen += '<tr><td><span class=green>DASDUCB  000308'
+    screen += '<tr><td><span class=green>DIRPDS   00030B'
+    screen += '<tr><td><span class=green>DSCB     00030E'
+    screen += '<tr><td><span class=green>EDTLIST  000405'
+    screen += '<tr><td><span class=green>EDTLOOK  00040A'
+    screen += '<tr><td><span class=green>GDGDEL   000502'
+    screen += '<tr><td><span class=green>GDGSCAN  000504'
+    screen += '<tr><td><span class=green>GENERIC  000506'
+    screen += '<tr><td><span class=green>LDSITEST 000508'
+    screen += '<tr><td><span class=green>LNKLIST  00050A'
+    screen += '<tr><td><span class=green>LST      00050D'
+    screen += '<tr><td><span class=green>LST#     000601'
+    screen += '<tr><td><span class=green>MOO      000603'
+    screen += '<tr><td><span class=green>RDSNALL  000606'
+    screen += '<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward  F10=browse  F12=cancel'
+    screen += '</table>'
+    screens[0] = screen
+    screen = ''
+    screen += '<table class=screen border=0>'
+    screen += '<tr><td><span class=yellow>XMITLIST 1.0              CBT.V486.FILE020.PDS($$$DOC)               FILE020.XMI'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=green>DOC FOR REXX EXECS (AND WHAT THEY NEED).'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=green>       AUTHOR:   ANONYMOUSLY DONATED'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=green>       CALL:     SAM GOLOB'
+    screen += '<tr><td><span class=green>                 SCG SERVICES INC.'
+    screen += '<tr><td><span class=green>                 1417 LAURELWOOD AVENUE'
+    screen += '<tr><td><span class=green>                 LAKEWOOD, NJ 08701-1732'
+    screen += '<tr><td><span class=green>                 (908) 901-0943'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=green>   THIS IS A COLLECTION OF HANDY DANDY, QUICK N DIRTY REXX EXECS'
+    screen += '<tr><td><span class=green>   THAT DO SOME USEFUL THINGS.  TRY EM.  YOU (MAY) LIKE EM.'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=green>   THERE ARE TWO ASSEMBLER ROUTINES:  UCBSUBR, RDSNALL'
+    screen += '<tr><td><span class=green>   THERE IS ONE TSO HELP MEMBER    :  LST#'
+    screen += '<tr><td><span class=green>   THERE IS ONE ASSEMBLER MACRO    :  REGS'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=green>   PLEASE NOTE THAT SOME DISPLACEMENTS IN CONTROL BLOCKS MAY VARY'
+    screen += "<tr><td><span class=green>   FROM ONE RELEASE OF MVS TO ANOTHER.  IF AN EXEC DOESN'T WORK ON"
+    screen += "<tr><td><span class=green>   YOUR SYSTEM, THAT MAY BE SOMETHING THAT'S WORTH LOOKING INTO."
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=green>   THERE MAY ALSO BE SOME DEPENDENCY ON THE RELEASE OF TSO/E REXX.'
+    screen += '<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward              F12=cancel'
+    screen += '</table>'
+    screens[1] = screen
+    screen = ''
+    screen += '<table class=screen border=0>'
+    screen += '<tr><td><span class=yellow>XMITLIST 1.0                  CBT.V486.FILE020.PDS                   FILE020.XMI'
+    screen += '<tr><td><span class=green>&nbsp;'
+    screen += '<tr><td><span class=blue>Member   TTR'
+    screen += '<tr><td><span class=green>$$$DOC   000204'
+    screen += '<tr><td><span class=cursor>APFLIST  000206                                                  '                                                                    
+    screen += '<tr><td><span class=green>ASCB     000208'
+    screen += '<tr><td><span class=green>ASCB2    00020A'
+    screen += '<tr><td><span class=green>BRODCAST 00020D'
+    screen += '<tr><td><span class=green>CARDS    000210'
+    screen += '<tr><td><span class=green>CAXWA    000305'
+    screen += '<tr><td><span class=green>DASDUCB  000308'
+    screen += '<tr><td><span class=green>DIRPDS   00030B'
+    screen += '<tr><td><span class=green>DSCB     00030E'
+    screen += '<tr><td><span class=green>EDTLIST  000405'
+    screen += '<tr><td><span class=green>EDTLOOK  00040A'
+    screen += '<tr><td><span class=green>GDGDEL   000502'
+    screen += '<tr><td><span class=green>GDGSCAN  000504'
+    screen += '<tr><td><span class=green>GENERIC  000506'
+    screen += '<tr><td><span class=green>LDSITEST 000508'
+    screen += '<tr><td><span class=green>LNKLIST  00050A'
+    screen += '<tr><td><span class=green>LST      00050D'
+    screen += '<tr><td><span class=green>LST#     000601'
+    screen += '<tr><td><span class=green>MOO      000603'
+    screen += '<tr><td><span class=green>RDSNALL  000606'
+    screen += '<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward  F10=browse  F12=cancel'
+    screen += '</table>'
+    screens[2] = screen
+    screen = ''
+    screen += '<table class=screen border=0>'
+    screen += '<tr><td><span class=yellow>XMITLIST 1.0             CBT.V486.FILE020.PDS(APFLIST)               FILE020.XMI'
+    screen += '<tr><td><span class=green>'
+    screen += '<tr><td><span class=green>/******************************  REXX  *******************************/'
+    screen += '<tr><td><span class=green>/*     THIS REXX PROGRAM LISTS ALL THE APF LIBRARIES BY BROWSING     */'
+    screen += '<tr><td><span class=green>/*     THE AUTHORIZED LIBRARY TABLE AT OFFSET 484 IN THE CVT.        */'
+    screen += '<tr><td><span class=green>/*     THE LAYOUT IS: NUMBER OF ENTRIES    2                         */'
+    screen += '<tr><td><span class=green>/*                    LEN OF ENTRY         1        )   TIMES        */'
+    screen += '<tr><td><span class=green>/*                    VOLUME               6        )   NUMBER       */'
+    screen += '<tr><td><span class=green>/*                    DSN                  VARIABLE )   OF ENTRIES   */'
+    screen += '<tr><td><span class=green>/*********************************************************************/'
+    screen += '<tr><td><span class=green>ARG     NAME'
+    screen += '<tr><td><span class=green>CLEAR                                        /* CLEAR SCREEN        */'
+    screen += '<tr><td><span class=green>CVT     = STORAGE(10,4)                      /* DECIMAL 16 ==> CVT  */'
+    screen += '<tr><td><span class=green>CCVT    = C2X(CVT)                           /* CHAR CVT ADDRESS    */'
+    screen += '<tr><td><span class=green>DCVT    = C2D(CVT)                           /* DECIMAL CVT ADDR    */'
+    screen += '<tr><td><span class=green>DAUTH   = DCVT + 484                         /* DECIMAL AUTH ADDR   */'
+    screen += '<tr><td><span class=green>AUTH    = D2C(DAUTH,4)                       /* AUTH TAB ADDRESS    */'
+    screen += '<tr><td><span class=green>CAUTH   = C2X(AUTH)                          /* CHAR AUTH TAB ADDR  */'
+    screen += '<tr><td><span class=green>ADDR1   = STORAGE(CAUTH,4)                   /* ADDRESS OF AUTH TAB */'
+    screen += '<tr><td><span class=green>CADDR1  = C2X(ADDR1)                         /* CHAR ADDR OF AUTH   */'
+    screen += '<tr><td><span class=green>DATA    = STORAGE(CADDR1,2)                  /* GET LUMP OF DATA    */'
+    screen += '<tr><td><span class=green>NUMENT  = SUBSTR(DATA,1,2)                   /* NUMBER OF ENTRIES   */'
+    screen += '<tr><td><span class=green>DNUMENT = C2D(NUMENT)                        /* CONVERT TO DECIMAL  */'
+    screen += '<tr><td><span class=green>LEN     = (DNUMENT * 51) + 2                 /* MAX STORAGE POSS    */'
+    screen += '<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward              F12=cancel'
+    screen += '</table>'
+    screens[3] = screen
+    }
+  }
+
+function sprite(x) {
+  if (x != 0) {
+   index = x
+   n = 0
+   if (show[index-1] == 0) {
+     show[index-1] = 1;
+     setup(x)
+     if (LANG == 'EN') t = "Stop presentation";
+     else t = "Остановить презентацию";
+     delay = 6000;
+   } else {
+     show[index-1]=0;
+     if (LANG == 'EN') t = "Start presentation";
+     else t = "Начать презентацию";
+     delay = 0;
+   }
+  }
+  document.getElementById("button_"+index+"_"+LANG).innerText=t;
+  if (n > screens.length-1) n = 0;
+  if (delay > 0) {
+    document.getElementById('wrapper_'+index+"_"+LANG).innerHTML = screens[n];
+    n = n + 1;
+    if (delay > 0) setTimeout("sprite(0)", delay);
+  } else document.getElementById('wrapper_'+index+"_"+LANG).innerHTML = '';
+}
+
+var LANG = 'EN'
+var screens = [];
+show = [0,0];
+index = 0; // which sprite running 1 or 2
+delay = 0;
+var n = 0;
+
+</script>
+<body onload=EN();>
+<div class=sticky>
+<button id="EN" type="button" onclick="EN()" title="EN"><span style="font-size:14px;">EN</span>
+<button id="RU" type="button" onclick="RU()" title="RU"><span style="font-size:14px;">RU</span>
+</button>
+</div>
+<span class=ru>
+<h2 align=center>Процедуры обработки AWS & XMIT в Windows/Linux</h2>
+<p>Все процедуры написаны на REXX, поддерживаются OOREXX и Regina REXX. Процедуры AWSLIST и XMITLIST
+реализуют полноэкранный диалог с помощью THE, остальные процедуры выполняются
+в командной строке. Каждая процедура независима и может использоваться отдельно.
+Нажмите на имя процедуры, чтобы увидеть подробное описание. Предполагается, что 
+OOREXX либо Regina REXX уже установлены и расширение имени файла .rex правильно
+ассоциировано (см. также REXLINK ниже). </p>
+</span>
+<span class=en>
+<h2 align=center>AWS & XMIT processing tools on Windows/Unix</h2>
+<p>All procedures written in REXX, both OOREXX and Regina REXX are supported. AWSLIST and XMITLIST are full-screen
+implemented with THE, all other procedures are line-mode. Each procedure can be
+used separately. Click on the procedure name to see detail help. File extension .rex
+should be properly associated (see also REXLINK below).</p>
+</span>
+<span class=ru>
+<ul>
+<li><a href=awslist.htm>AWSLIST</a> - просмотр содержимого образа магнитной ленты формата AWS в Windows/Unix в режиме
+    полного экрана. Просмотр оглавления и разделов наборов, выгруженных 
+    IEBCOPY и IEHMOVE; читабельный просмотр наборов, подготовленных для печати (с управляющими символами).
+   <button id="button_1_RU" type="button" onclick="sprite('1')">Начать презентацию</button>
+   <div id="wrapper_1_RU"></div>  
+<li><a href=awsload.htm>AWSLOAD</a> - извлечение файлов с ленты формата AWS.
+<li><a href=awsdump.htm>AWSDUMP</a> - запись файла на ленту AWS.
+<li><a href=awsinit.htm>AWSINIT</a> - инициализация ленты AWS, функциональный аналог z/OS IEHINITT
+<li><a href=awslist.htm>AWSMAP</a> - эквивалент AWSLIST -batch: оглавление ("справка") ленты AWS
+<li><a href=uncopy.htm>UNCOPY</a> - копирование разделов из файла, выгруженного IEBCOPY, на диск
+<li><a href=unmove.htm>UNMOVE</a> - копирование разделов из файла, выгруженного IEHMOVE, на диск
+<li><a href=unisam.htm>UNISAM</a> - извлечение данных из файла, выгруженного IEBISAM
+
+<li><a href=unisam.htm>XMITLIST</a> - просмотр содержимого файла выгруженного XMIT в формате полного экрана.
+   <button id="button_2_RU" type="button" onclick="sprite('2')">Начать презентацию</button>
+   <div id="wrapper_2_RU"></div>  
+<li><a href=unisam.htm>UNXMIT</a> - извлечение данных из файла, выгруженного XMIT (TRANSMIT)
+<li><a href=rexmit.htm>REXMIT</a> - "анонимизация" файла XMIT
+<li><a href=dexmit.htm>DEXMIT</a> - извлечение файла, выгруженного IEBCOPY, из файла, выгруженного XMIT;
+<li><b>REXLINK</b> - ассоциирует расширение .rex с OOREXX (REXLINK OOREXX) или REGINA (REXLINK REGINA);
+</ul>
+</span>
+<span class=en>
+<ul>
+<li><a href=awslist.htm>AWSLIST</a> - full-screen AWS tape browser. Both standard labelled and unlabelld tapes supported.
+    Several unloaded formats recognized. Browse tape files, directories and members of IEBCOPY or IEHMOVE unloaded data sets,
+    enhanced browse of the printable data set having ASA control charaters.
+    <button id="button_1_EN" type="button" onclick="sprite('1')">Start presentation</button>
+    <div id="wrapper_1_EN"></div>  
+<li><a href=awsload.htm>AWSLOAD</a> - extracts data from AWS tape. Entire files can be extracted as well
+    as IEBCOPY/IEHMOVE unloaded members.
+<li><a href=awsdump.htm>AWSDUMP</a> - write data to AWS tape. Both standard labelled and unlabelled tapes supported, data set
+    standard labels created as required. Existing tape may be appended. 
+<li><a href=awsinit.htm>AWSINIT</a> - initialize AWS tape. The same as z/OS IEHINITT does.
+<li><a href=awslist.htm>AWSMAP</a> - shortcut for AWSLIST -batch. Write AWS tape map and exits.
+<li><a href=uncopy.htm>UNCOPY</a> - extracts members from IEBCOPY unloaded file
+<li><a href=unmove.htm>UNMOVE</a> - extracts members from IEHMOVE unloaded file
+<li><a href=unisam.htm>UNISAM</a> - extracts data from IEBISAM unloaded file
+<li><a href=unpack.htm>UNPACK</a> - unpack data packed by CMS COPYFILE or TSO/ISPF EDIT
+
+<li><a href=xmitlist.htm>XMITLIST</a> - full-screen XMIT (TRANSMIT, IDTF) browser. A functional equivalent of well-known
+    XMITMGR.
+   <button id="button_2_EN" type="button" onclick="sprite('2')">Start presentation</button>
+   <div id="wrapper_2_EN"></div>  
+<li><a href=unxmit.htm>UNXMIT</a> - extracts data from XMIT file (line-mode utility)
+<li><a href=rexmit.htm>REXMIT</a> - "anonimize" XMIT file
+<li><a href=dexmit.htm>DEXMIT</a> - extracts IEBCOPY image from XMIT file;
+<li><b>REXLINK</b> - quickly associate .rex extension with OOREXX (REXLINK OOREXX) or REGINA (REXLINK REGINA);
+</ul>
+</span>
+</body>
+</html>

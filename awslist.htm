@@ -1,0 +1,509 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head><title>AWSLIST - "filelist-like" AWS tape browser</title></head>
+<style>
+body {background-color:white;color:black;font-family:Verdana;}
+td.n, td.b {font-family:Verdana;font-weight:normal;font-size:12pt;}
+td.n {font-weight:normal;}
+td.b {font-weight:bold; width: 120px;}
+a.plain, a.plain:link, a.plain:hover {color:black;}
+table.screen {background-color: black; border-spacing: 0px 0px 0px 0px;
+    border-collapse: collapse;}
+table.screen tr {background-color: black; }
+table.screen tr td {display: block; unicode-bidi: embed;
+   font-family: monospace; font-size: 16px; white-space: pre;
+   padding: 0px; margin: 0px; height: 18px; }
+span.brite {background-color:lightyellow;color:black;}
+span.border {border: 1px solid black;}
+span.green, span.turq, span.white, span.blue, span.red,
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {background:black;font-style:normal;}
+span.green, span.turq, span.white, span.blue, span.red, span.yellow
+ {font-weight:normal;}
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {font-weight:bold;}
+span.turq, span.turqbold {color:turquoise;}
+span.white, span.whitebold {color:white;}
+span.green {color:green;}
+span.blue {color:deepSkyBlue;}
+span.red, span.redbold {color:red;}
+span.yellow {color:yellow;}
+span.jcl {color:black; font-weight:normal; font-style:normal; font-size:10pt;}
+span.cursor
+ {color:black; background:green; font-weight:normal; font-style:normal;}
+span.cmd, span.hrc, span.sys { font-family: Courier; font-weight: bold; white-space: nowrap;}
+span.sys { color: black; background-color: lightgrey; }
+span.cmd { color: lightgrey; background-color: black; }
+span.hrc { color: yellow; background-color: black; }
+div.sticky { position: -webkit-sticky; /* Safari */ position:sticky; float:right; top:0;}
+</style>
+<script>
+function RU() {
+  view('RU', 'block');
+  view('EN', 'none');
+}
+
+function EN() {
+  view('RU', 'none');
+  view('EN', 'block');
+}
+
+function view(lang, attr) {
+  Array.from(document.getElementsByClassName(lang)).forEach (item => { item.style.display = attr; });
+}
+
+</script>
+<body onload=EN();>
+<div class=sticky>
+<button id="EN" type="button" onclick="EN()" title="EN"><span style="font-size:14px;">EN</span>
+<button id="RU" type="button" onclick="RU()" title="RU"><span style="font-size:14px;">RU</span>
+</button>
+</div>
+
+<table>
+<tr><td class=b>
+<span class=en>Function:</span>
+<span class=ru>Функция:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<span class=en>Browse AWS tape - show tape map, directory of unloaded IEHMOVE and
+IEBCOPY data sets, content of individual members of those data sets as
+well as sequential data sets on the tape. awslist implemented as
+Windows console application and designed in old fashion VM/CMS FILELIST style :-)</span>
+<span class=ru>Просмотр моделируемой магнитной ленты формата AWS. Отображаются краткие
+сведения о файлах ленты ("справка"), оглавления наборов данных, выгруженных
+программами IEHMOVE и IEBCOPY, содержимое последовательных наборов данных и
+разделов выгруженных библиотек, список файлов, выгруженных командами TAPE и
+VMFPLC2 VM/CMS. awslist реализовано как консольное приложение Windows,
+а его внешний вид и функциональность подобны старомодному VM/CMS FILELIST :-)</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Syntax:</span><span class=ru>Формат:</span><td>&nbsp;<tr><td class=n>&nbsp;
+<tr><td class=b>&nbsp;<td class=n><span class=border>&nbsp;<b>AWSLIST</b>&nbsp;[-<b>ba</b>tch]&nbsp;[-<b>bl</b>p]&nbsp;[-<b>e</b>bcdic codepage]&nbsp;[-<b>a</b>scii codepage]<i> awstape</i></span>
+
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Prerequested</span><span class=ru>Требования:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<ul>
+<li><span class=en>Either Open object REXX (OOREXX) or Regina REXX</span><span class=ru>Open Object REXX (OOREXX) либо Regina REXX</span>
+<li><span class=en>File extension .rex must be properly associated</span><span class=ru>Расширение имени файлов .rex должно быть правильно ассоциировано</span>
+<li><span class=en>The Hessling Editor (THE), Windows version 3.3B3 included</span><span class=ru>The Hessling Editor (THE), версия Windows 3.3B3 включена</span>
+</ul></td>
+
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Installation</span><span class=ru>Установка</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<span class=en>Special installation procedure not required. However, windows console
+session used for awslist need to be customized. awslist provide browsing
+of tape data, so it is important to represent data correctly, including
+possible national characters. <b>awslist</b> delivered with shortcut (<b>awslist.lnk</b>)
+already customized for cyrillic languages. If you use different language,
+you need to change awslist propeties as follows:
+<ul>
+<li>specify the proper font which is represent national characters
+<li>specify correct EBCDIC and ASCII codepages (-e and -a options)
+to provide correct national characters representation. Please see
+<a href=https://docs.microsoft.com/en-us/windows/win32/intl/code-page-identifiers">this page</a>
+and choose a proper codepage for your native language. Please use THE against any file with national characters
+to be sure that ASCII console codepage is correct. 
+</ul>
+<p>Delivered shortcut defines font "Lucida Console" with 14px size, and
+do not specified -e and -a options, therefore default internal translate table
+from codepage 1025 (EBCDIC cyrillic, it is practically the same as 20880) and
+866 (Windows OEM cyrillic) are used.</p>
+</span>
+<span class=ru>Какая-либо специальная установка awslist не требуется, однако, может потребоваться настройка
+сессии консоли windows. Так как основной функцией awslist является просмотр данных,
+они должны корректно отображаться, включая национальные символы. awslist поставляется
+с ярлыком (awslist.lnk), который обеспечивает отображение символов кириллицы.
+Если для представления данных используется другой язык, необходимо изменить свойства
+ярлыка следующим образом:
+<ul>
+<li>указать подходящий шрифт для правильного представления национальных символов;
+<li>указать подходящие кодовые страницы EBCDIC и ASCII для правильного представления
+национальных символов. См. <a href=https://docs.microsoft.com/en-us/windows/win32/intl/code-page-identifiers">эту страницу</a>
+для выбора подходящих кодовых страниц используемого языка. Используйте THE для редактирования
+произвольного файла с национальными символами, чтобы убедиться в правильности кодовой
+страницы ASCII.
+</ul>
+<p>Поставляемый ярлык определяет шрифт "Lucida Console" размером 14px и
+не определяет режимы -e и -a, поэтому используется встроенная таблица трансляции
+из 1025 ((EBCDIC кириллица, практически совпадает с 20880) и 866 (Windows OEM кириллица).
+</span>
+</td>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Usage:</span><span class=ru>Применение</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n><span class=en>Let's consider awslist features on example. Enter <span class=cmd>awslist.lnk jessy.aws</span>, where jessy.aws
+is AWS file kept on the same directory (path can be specified as required). You'll see progress indicator, because whole
+tape should be processed first, then the following screen appears:</span>
+<span class=ru>Рассмотрим использование awslist на примере конкретного файла jessy.aws. После выполнения <span class=cmd>awslist.lnk jessy.aws</span>, где jessy.aws
+файл AWS, расположенный в тоже каталоге, что и awslist (может указываться путь, если это не так) происходит обработка всей эмулируемой ленты (индикатор продвижения
+показывет процент обработанных блоков) и, когда вся лента обработана, появляется следующий экран:
+</span>
+<table class=screen border=0>
+<tr><td><span class=yellow><b>AWSLIST 1.3                  JESSY.aws.map                          SL,JGTAPE
+<tr><td><span class=green>&nbsp;
+<tr><td><span class=green><b> File Blocks Name              Recfm Lrecl Blksize Created    Content</b>
+<tr><td><span class=cursor>    1    119 INSTALL           F     00080   00080 13.05.1985 RDR            
+<tr><td><span class=green>    2     87 JESSY.INSTALL     FB    00080   00800 13.05.1985 IEHMOVE
+<tr><td><span class=green>    3     69 JESSY.LINK        VS    03641   03645 00.01.3000 IEBCOPY
+<tr><td><span class=green>    4     19 JESSY.PROC        VS    00816   00820 00.01.3000 IEBCOPY
+<tr><td><span class=green>    5     37 JESSY.ARX         VS    00896   00900 00.01.3000 IEBCOPY
+<tr><td><span class=green>    6    208 JESSY.HELP        VS    00896   00900 00.01.3000 IEBCOPY
+<tr><td><span class=green>    7    211 JESSY.HLINK.D5050 F     03584   03584 13.05.1985
+<tr><td><span class=green>    8    102 JESSY.HLINK.D5061 F     07168   07168 13.05.1985
+<tr><td><span class=green>    9     58 JESSY.HLINK.D5066 F     12928   12928 13.05.1985
+<tr><td><span class=green>   10    199 JESSY.IALL        FBA   00133   03990 00.01.3000 WTR
+<tr><td><span class=green>   11    102 JESSY.ISYS        FBA   00133   03990 00.01.3000 WTR
+<tr><td><span class=green>   12     27 JESSY.IREST       FBA   00133   03990 00.01.3000 WTR
+<tr><td><span class=green>   13     41 JESSY.ISTUD       FBA   00133   03990 00.01.3000 WTR
+<tr><td><span class=green>   14     31 LIB4.TERMTEXT     VS    03536   03540 00.01.3000 IEBCOPY
+<tr><td><span class=green>   15     27 LIB4.TERMEDIT     VS    07310   07314 00.01.3000 IEBCOPY
+<tr><td><span class=green>   16    249 JESSY.INSTR       VS    04096   04100 00.01.3000 IEBCOPY
+<tr><td><span class=green>   17     69 JESSY.LINK.SVS    VS    03641   03645 00.01.3000 IEBCOPY
+<tr><td><span class=green>   18     95 WTR7934           VS    00416   00420 00.01.3000 IEBCOPY
+<tr><td><span class=green>   19      6 JESSY.RDRZ        VS    03641   03645 00.01.3000 IEBCOPY
+<tr><td><span class=green>
+<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward  F10=browse  F12=cancel
+</table>
+<span class=en><p>Token shown on the upper right corner ("SL,JGTAPE" here) is tape label type and 
+volume label in case of standard labelled tape (SL in term of OS/360-OS/370-z/OS), otherwise it
+if unlabelled (NL). Column "File" show file sequence number, it can be used in JCL
+to process particular data set (DSN=JESSY.LINKLIB,LABEL=(3,SL) for instance).
+Column "Blocks" show number of blocks in appropriate tape file, columns "Name", "RECFM", "LRECL",
+"BLKSIZE", "Created" shows data set name and it's attributes. Of course, name and most attributes 
+shown for standard labelled tape only, however, procedure tried to calculate
+LRECL and RECFM for non-labelled tape too.
+Column "Content" indicate a special data set format. If it recognized, name of the
+processing program is shown. So, "RDR" means recognized job (JCL) stream, WTR means
+printable output, IEHMOVE - data set unloaded by IEHMOVE and so on.</p>
+<p>You can scroll the list with F7/F8 and PgUp/PgDown, but also can unhide command line with F2 and then 
+use any THE command - locate, find etc.</p>
+<p>Move cursor to the first line (data set INSTALL) and press F10. Content of the sequential data set INSTALL being displayed:</p>
+</span>
+<span class=ru><p>В верхнем правом углу отображается тип меток (SL, NL в терминах
+OS/360-OS/370-z/OS), и имя тома в случае стандартных меток (SL). Колонка "File" 
+содержит порядковый номер файла ленты, он может использоваться в заданииs (JCL)
+для обработки определенного набора данных летны (например, DSN=JESSY.LINKLIB,LABEL=(3,SL)).
+В колонке "Blocks" отображается количество блоков файла, в колонках "Name", "RECFM", "LRECL",
+"BLKSIZE", "Created" имя набора данных и его атрибуты. Разумеется, имя набора данных как и 
+большинство атрибутов отображается только для ленты со стандартными метками (SL), однако,
+awslist пытается определить формат и длину записи ("RECFM" и "LRECL") и для ленты без меток (NL).
+В колонке "Content" указывается, что обнаружен специальный формат набора данных, т.е.
+этот набор данных записан для обработки определенной программой. Так, "RDR" означает, что
+набор данных содержит поток заданий (JCL), WTR - что набор данных предназначен для вывода на печать,
+IEHMOVE - набор данных, выгруженный программой IEHMOVE и т.д.</p>
+</span>
+<p><span class=ru>Список можно листать с помощью F7/F8 и PgUp/PgDown, но также можно вызвать командную строку THE с помощью F2
+и затем использовать любые команды THE - locate, find etc.</p></span>
+<span class=ru><p>Переместите курсор к первой строке (набор данных INSTALL) и нажмите F10.
+Отобразится содержимое последовательного набора данных INSTALL</p></span>
+<table class=screen border=0>
+<tr><td><span class=yellow><b>AWSLIST 1.3                  INSTALL.data                           SL,JGTAPE
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>//INSTALL JOB 'O-1-1',MSGLEVEL=(1,1)
+<tr><td><span class=green>//PRT  EXEC PGM=IEBGENER
+<tr><td><span class=green>//SYSPRINT DD DUMMY
+<tr><td><span class=green>//SYSIN    DD DUMMY
+<tr><td><span class=green>//SYSUT2   DD SYSOUT=A,DCB=(BLKSIZE=800,LRECL=80,RECFM=FB)
+<tr><td><span class=green>//SYSUT1   DD *
+<tr><td><span class=green>
+<tr><td><span class=green>            C O C T A B   Д И C T P И Б У T И B H O Й   Л E H T Ы
+<tr><td><span class=green>
+<tr><td><span class=green>                            C И C T E M Ы   J E S S Y
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>     HOMEP      ИMЯ ФAЙЛA       TИП          KOMMEHTAPИЙ
+<tr><td><span class=green>
+<tr><td><span class=green>       1     INSTALL            GENER   ЭTOT TEKCT
+<tr><td><span class=green>       2     JESSY.INSTALL      MOVE    БИБЛИOTEKA ЗAДAHИЙ ДЛЯ УCTAHOBKИ
+<tr><td><span class=green>       3     JESSY.LINK         COPY    БИБЛИOTEKA ЗAГPУЗOЧHЫX MOДУЛEЙ
+<tr><td><span class=green>                                         (MVT MFT)
+<tr><td><span class=green>       4     JESSY.PROC         COPY    ПPOЦEДУPЫ ДЛЯ ПOMEЩEHИЯ B
+<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward              F12=cancel
+</table>
+
+<span class=en><p>Press F3 tо go back to the tape map, move cursor to the second line (data set JESSY.INSTALL) and
+press 10. Directory of this partitioned data set unloaded by IEHMOVE appears:</p></span>
+<span class=ru><p>Нажмите F3 для возврата к оглавлению ленты, переместите курсор вниз (к набору данных JESSY.INSTALL)
+и нажмите F10. Будет отображено оглавление этого набора данных, выгруженного программой IEHMOVE:</p></span>
+<table class=screen border=0>
+<tr><td><span class=yellow>AWSLIST 1.3               JESSY.INSTALL.directory                    SL,JGTAPE
+<tr><td><span class=green>
+<tr><td><span class=green><b>Member   TTR</b>
+<tr><td><span class=cursor>COPYPROC 000000                                                                
+<tr><td><span class=green>INSTALL  000302
+<tr><td><span class=green>MVT5050  000803
+<tr><td><span class=green>MVT5061  000406
+<tr><td><span class=green>MVT5066  00030D
+<tr><td><span class=green>PRTINSTR 000502
+<tr><td><span class=green>SERVLOC  000706
+<tr><td><span class=green>SVS5050  00020F
+<tr><td><span class=green>SVS5061  000704
+<tr><td><span class=green>SVS5066  000608
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward  F10=browse  F12=cancel
+</table>
+<br>
+<span class=en><p>Move cursor to the member in the list and press F10 to see member content:</p></span>
+<span class=ru><p>Переместите курсор к разделу библиотечного набора данных из списка и нажмите F10 для его просмотра:</p></span>
+<table class=screen border=0>
+<tr><td><span class=yellow>AWSLIST 1.3               JESSY.INSTALL(COPYPROC).data               SL,JGTAPE
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=cursor>//COPYPROC JOB 'O-1-1',JESSY,MSGLEVEL=(1,1),REGION=128K                        
+<tr><td><span class=green>//COPY EXEC PGM=IEBCOPY
+<tr><td><span class=green>//SYSPRINT DD SYSOUT=A
+<tr><td><span class=green>//SYSUT3   DD SPACE=(TRK,(20,20)),UNIT=SYSDA
+<tr><td><span class=green>//SYSUT4   DD SPACE=(TRK,(20,20)),UNIT=SYSDA
+<tr><td><span class=green>//JPROC    DD DSN=JESSY.PROC,DISP=SHR
+<tr><td><span class=green>//PROC     DD DSN=SYS1.PROCLIB,DISP=SHR
+<tr><td><span class=green>//SYSIN    DD *
+<tr><td><span class=green> COPY INDD=((JPROC,R)),OUTDD=PROC
+<tr><td><span class=green>//
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward              F12=cancel
+</table>
+<br>
+<span class=en><p>The same features are available for the data set unloaded by IEBCOPY utility:</p></span>
+<span class=ru><p>Такие же возможности доступны для наборов данных, выгруженных программой IEBCOPY:</p></span>
+<table class=screen border=0>
+<tr><td><span class=yellow>AWSLIST 1.3               JESSY.LINK.directory                       SL,JGTAPE
+<tr><td><span class=green>
+<tr><td><span class=green><b>Member   TTR</b>
+<tr><td><span class=cursor>ARXMAIN  000604                                                                
+<tr><td><span class=green>IEFSD080 000B03
+<tr><td><span class=green>IEFVMA   000B12
+<tr><td><span class=green>IJSFVALL 000B22
+<tr><td><span class=green>IJSTXCMD 000C0C
+<tr><td><span class=green>IJSVTAB  000B1A
+<tr><td><span class=green>JESDEBHF 000A1D
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward  F10=browse  F12=cancel
+</table>
+<span class=en><p>Current version of awslist also recognized VM/CMS TAPE DUMP and VMFPLC2 formats and can display
+list of original VM/CMS files and their attribites. However, browse of original files not yet supported</p></span>
+<span class=ru><p>Данная версия awslist также опознает формат VM/CMS TAPE DUMP и VMFPLC2 formats и отображает
+список оригинальых файлов VM/CMS с их атрибутами, но просмотр содержимого оригинального файла
+пока не поддерживается.</p></span>
+
+<span class=en><p>When browsed tape file has ASA print control character (i.e. RECFM is FA of FBA),
+these control charactes interpreted and removed, so rather than</p></span>
+<span class=ru><p>Если просматриваемый последовательный набор данных содержит управляющие символы печати в коде ASA
+(т.е. RECFM FA или FBA), эти управляющие символы интерпретируются и удаляются,
+и вместо следующего</p></span>
+<pre style="background-color: lightgrey; width: 700px;">
+1
+
+
+
+
+             БOЛOTOB A.C.,  EBФИMИУ B.A.,  ШИПOBAЛOB A.Д.
++            БOЛOTOB A.C.,  EBФИMИУ B.A.,  ШИПOBAЛOB A.Д.
++            БOЛOTOB A.C.,  EBФИMИУ B.A.,  ШИПOBAЛOB A.Д.
+
+
+
+
+
+
+
+
+
+
+        $$$$$$$$    $$$$$      $$$$$      $$$$$    $$$    $$$
++       $$$$$$$$    $$$$$      $$$$$      $$$$$    $$$    $$$
++       $$$$$$$$    $$$$$      $$$$$      $$$$$    $$$    $$$
+</pre>
+<span class=en>we can see better readable text:</span>
+<span class=ru>будет отображаться более читабельный текст:</span>
+<table class=screen border=0>
+<tr><td><span class=yellow>AWSLIST 1.3               JESSY.IREST.data                           SL,JGTAPE 
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>            БOЛOTOB A.C.,  EBФИMИУ B.A.,  ШИПOBAЛOB A.Д.
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>       $$$$$$$$    $$$$$      $$$$$      $$$$$    $$$    $$$
+<tr><td><span class=green>       $$$  $$$  $$$   $$$  $$$   $$$  $$$   $$$  $$$    $$$
+<tr><td><span class=green>            $$$  $$$   $$$  $$$   $$$  $$$   $$$   $$$   $$$
+<tr><td><span class=green>            $$$  $$$   $$$   $$$        $$$         $$$ $$$
+<tr><td><span class=green>            $$$  $$$$$$$$$     $$$        $$$        $$$$$
+<tr><td><span class=green>            $$$  $$$             $$$        $$$       $$$
+<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward              F12=cancel
+</table>
+<br>
+<span class=en>As written above, file attributes (RECFM, LRECL, BLKSIZE) show
+are accurate for SL tape, for NL tape attributes are guesses:</span>
+<span class=ru>Как указано выше, характеристики файла ленты (RECFM, LRECL,
+BLKSIZE) будут точными только в случае ленты со стандартными метками (SL). Для 
+ленты без меток (NL) процедура пытается определить характеристики, анализируя
+длины блоков набора данных:</span>
+<table class=screen border=0>
+<tr><td><span class=yellow>AWSLIST 1.3                      1050.aws.map                                NL 
+<tr><td><span class=green>
+<tr><td><span class=green> File Blocks Name              Recfm Lrecl Blksize Created    Content
+<tr><td><span class=green>    1      2                   FB    29283   29283
+<tr><td><span class=green>    2     84                   FB       80      80            RDR
+<tr><td><span class=cursor>    3      6                   FB     4101    4101            TAPE DUMP        
+<tr><td><span class=green>    4      3                   FB    32250   32250
+<tr><td><span class=green>    5      4                   FB    32250   32250
+</table>
+<span class=en>An attempt to view file 3 would cause an error message "Error 0029: Cannot edit - Line 1 exceeds max. width of 512",
+because logical record length is 32250. Problem can be fixed, if you know accurate 
+record length, in this case it is 129. Just move cursor to the guessed record length
+(32250) and overtype correct length (129):</span> 
+<span class=ru>Попытка просмотра файла 3 тленты вызовет сообщение об ошибке "Error 0029: Cannot edit - Line 1 exceeds max. width of 512",
+так как длина записи 32250. Проблема может быть устранена, если известен корректная
+длина записи, в этом случае это 129. Переместите курсор к полю длины записи и укажите
+правильную длину:</span>
+<table class=screen border=0>
+<tr><td><span class=yellow>AWSLIST 1.3                           1050.aws map                           NL 
+<tr><td><span class=green>
+<tr><td><span class=green> File Blocks Name              Recfm Lrecl Blksize Created    Content
+<tr><td><span class=green>    1      2                   FB    29283   29283
+<tr><td><span class=green>    2     84                   FB       80      80            RDR
+<tr><td><span class=green>    3      6                   FB     4101    4101            TAPE DUMP
+<tr><td><span class=cursor>    4      3                   FB      129   32250                             
+<tr><td><span class=green>    5      4                   FB    32250   32250
+</table>
+<span class=en>Now file can be properly viewed with F10.</span>
+<span class=ru>Теперь файл может просматриваться (F10).</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b colspan=2><span class=en>Batch mode</span><span class=ru>Пакетный режим</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<span class=en>Batch mode (-batch option) awslist creates tape map and exits. In this
+mode THE do not used.</span>
+<span class=ru>В пакетном режиме (указано -batch) awslist записывает оглавление ленты и
+заканчивает работу. В этом режиме THE не используется.</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b colspan=2><span class=en>BLP mode</span><span class=ru>Режим BLP</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<span class=en>BLP (-blp option) blocks label processing. This option useful for non-standard SL
+tapes, if you get an error message during normal processing. Typical example is a SL
+tape, where after some fully correct data sets follow another data. See an example
+below</span>
+<span class=ru>Режим BLP (-blp) блокирует обработку стандартных меток. Этот режим
+может быть полезен в случае не совсем стандартных лент, например, когда после наборов
+данных с правильными стандартными метками записаны данных без меток. Ниже приведен
+пример обработки подобной ленты:</span>
+
+<table class=screen border=0>
+<tr><td><span class=white>E:\Projects\awslist>start awslist.htm                          
+<tr><td><span class=white>
+<tr><td><span class=white>E:\Projects\awslist>awslist.lnk cpl1.aws
+<tr><td><span class=white>Текущая кодовая страница: 866
+<tr><td><span class=yellow>Error: Tape file 13 block 1: HDR1 expected ☻CMS found
+</table>
+<br><span class=en>As you can see, we got an error message. -blp option
+allow us normally process this tape and understand what is wrong there:</span>
+<span class=ru>Как можно видеть, мы получаем сообщение об ошибке. Использование
+режима -blp позволяет обработать эту ленту и понять, что с ней не так:</span>
+<table class=screen border=0>
+<tr><td><span class=yellow>AWSLIST 1.3                       cpl1.aws.map                               BLP
+<tr><td><span class=green>
+<tr><td><span class=green> File Blocks Name              Recfm Lrecl Blksize Created    Content
+<tr><td><span class=green>    1      4                   FB       80      80            TAPE LABELS
+<tr><td><span class=green>    2    137                   VBS     816     820            IEBCOPY
+<tr><td><span class=green>    3      3                   FB       80      80            TAPE LABELS
+<tr><td><span class=green>    4      3                   FB       80      80            TAPE LABELS
+<tr><td><span class=green>    5    106                   VBS    7304    7308            IEBCOPY
+<tr><td><span class=green>    6      3                   FB       80      80            TAPE LABELS
+<tr><td><span class=green>    7      3                   FB       80      80            TAPE LABELS
+<tr><td><span class=green>    8    259                   VBS    3376    3380            IEBCOPY
+<tr><td><span class=green>    9      3                   FB       80      80            TAPE LABELS
+<tr><td><span class=green>   10      3                   FB       80      80            TAPE LABELS
+<tr><td><span class=green>   11    117                   VBS     816     820            IEBCOPY
+<tr><td><span class=green>   12      3                   FB       80      80            TAPE LABELS
+<tr><td><span class=cursor>   13    536                   FB     4101    4101            TAPE DUMP        
+<tr><td><span class=green>   14    469                   FB     4101    4101            TAPE DUMP
+<tr><td><span class=green>   15    192                   FB     4101    4101            TAPE DUMP
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=green>
+<tr><td><span class=yellow> F1=help  F2=cmdline  F3=quit  F7=backward  F8=forward  F10=browse  F12=cancel
+</table>
+<span class=en>Thus, we have SL tape labelled CPL with 4 data sets. Tape mark
+after 4th data set trailing labels (EOF) is missed, and there are some data written
+by CMS TAPE DUMP.</span>
+<span class=ru>Так, мы имеем ленту SL с именем тома CPL и 4 наборами данных. 
+Однако, после конечных меток 4-го набора данных (EOF) нет ленточной марки, там 
+данные, записанные TAPE DUMP в CMS.</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Notes</span><span class=ru>Примечания</span><td>&nbsp;<td>&nbsp;
+<tr><td class=b>&nbsp;<td class=n>
+<ul>
+<li><span class=en><p>Procedure kept on the current directory all browsed files and directories
+as well as tape map.</p></span>
+<span class=ru><p>Процедура не удаляет файлы, появившиеся в результате просмотра данных ленты.</p></span>
+<li><span class=en>Line <b>*** LOGICAL END OF TAPE ***</b> on screen indicates two
+consequtive tape marks. Procedure continues until physical end of tape reached.</span>
+<span class=ru>Строка <b>*** LOGICAL END OF TAPE ***</b> на экране указывает две
+последовательные ленточные марки, т.е. логический конец ленты. Процедура обрабатывает
+всю ленту до ее физического конца.</span>
+
+<li><span class=en><p>I suppose, this is close enough to analyze ancient SL tapes. However, I hope to add 
+processing of another special format in future, like IEHDASDR/IDCDMPRS dump, DDR dump,
+finalize VM/CMS TAPE DUMP as well as VMFPLC2 processing etc etc.</p></span>
+<span class=ru><p>Полагаю, что в текущем состоянии возможностей awslist достаточно
+для удобного анализа образов антикварных лент времен ОС ЕС. Тем не менее, я предполагаю
+развивать awslist чтобы обрабатывать файлы, выгруженные IEHDASDR/IDCDMPRS, DDR etc etc.</p></span>
+<li><span class=en>Why filelist (fulltext) style? Because I said so :) I believe, form must match the content.</span>
+<span class=ru>Почему в стиле filelist? Потому, что я так захотел :) Я всегда считал, что форма
+должна соответстовать содержанию.<span>
+</ul>
+</table>
+
+<span class=en>&copy; 2022-2023 Gregori Bliznets gregorytwin@gmail.com</span>
+<span class=ru>&copy; 2022-2023 Григорий Близнец gregorytwin@gmail.com</span>
+</body>
+</html>

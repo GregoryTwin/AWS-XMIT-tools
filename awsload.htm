@@ -1,0 +1,190 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head><title>AWSLOAD - load files from AWS tape image</title></head>
+<style>
+body {background-color:white;color:black;font-family:Verdana;}
+td.n, td.b {font-family:Verdana;font-weight:normal;font-size:12pt;}
+td.n {font-weight:normal;}
+td.b {font-weight:bold; width: 120px;}
+a.plain, a.plain:link, a.plain:hover {color:black;}
+table.screen {background-color: black; border-spacing: 0px 0px 0px 0px;
+    border-collapse: collapse;}
+table.screen tr {background-color: black; }
+table.screen tr td {display: block; unicode-bidi: embed;
+   font-family: monospace; font-size: 16px; white-space: pre;
+   padding: 0px; margin: 0px; height: 18px; }
+span.brite {background-color:lightyellow;color:black;}
+span.border {border: 1px solid black;}
+span.green, span.turq, span.white, span.blue, span.red,
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {background:black;font-style:normal;}
+span.green, span.turq, span.white, span.blue, span.red, span.yellow
+ {font-weight:normal;}
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {font-weight:bold;}
+span.turq, span.turqbold {color:turquoise;}
+span.white, span.whitebold {color:white;}
+span.green {color:green;}
+span.blue {color:deepSkyBlue;}
+span.red, span.redbold {color:red;}
+span.yellow {color:yellow;}
+span.jcl {color:black; font-weight:normal; font-style:normal; font-size:10pt;}
+span.cursor
+ {color:black; background:green; font-weight:normal; font-style:normal;}
+span.cmd, span.hrc, span.sys { font-family: Courier; font-weight: bold; white-space: nowrap;}
+span.sys { color: black; background-color: lightgrey; }
+span.cmd { color: lightgrey; background-color: black; }
+span.hrc { color: yellow; background-color: black; }
+div.sticky { position: -webkit-sticky; /* Safari */ position:sticky; float:right; top:0;}
+</style>
+<script>
+function RU() {
+  view('RU', 'block');
+  view('EN', 'none');
+}
+
+function EN() {
+  view('RU', 'none');
+  view('EN', 'block');
+}
+
+function view(lang, attr) {
+  Array.from(document.getElementsByClassName(lang)).forEach (item => { item.style.display = attr; });
+}
+
+</script>
+<body onload=EN();>
+<div class=sticky>
+<button id="EN" type="button" onclick="EN()" title="EN"><span style="font-size:14px;">EN</span>
+<button id="RU" type="button" onclick="RU()" title="RU"><span style="font-size:14px;">RU</span>
+</button>
+</div>
+
+<table>
+<tr><td class=b>
+<span class=en>Function:</span>
+<span class=ru>Функция:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<span class=en>Load AWS tape file(s) to disk.</span>
+<span class=ru>Загрузка файлов ленты AWS на диск.</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Syntax:</span><span class=ru>Формат:</span><td>&nbsp;<tr><td class=n>&nbsp;
+<tr><td class=b>&nbsp;<td class=n><span class=border>&nbsp;<b>AWSLOAD</b>&nbsp;[<i>options</i>] <i>awstape</i> {<i>file</i>|*} [<i>rename</i>]</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Options:</span><span class=ru>Режимы:</span><td>&nbsp;
+<tr><td class=b>&nbsp;<td class=n>-<b>b</b>inary | <u>-<b>t</b>ext</u>
+<br>-<b>e</b>bcdic <i>codepage</i>
+<br>-<b>a</b>scii <i>codepage</i>
+<br>-<b>r</b>eblock <i>lrecl</i>
+<br>-<b>blp</b>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Prerequested</span><span class=ru>Требования:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<ul>
+<li><span class=en>Either Open object REXX (OOREXX) or Regina REXX</span><span class=ru>Open Object REXX (OOREXX) либо Regina REXX</span>
+<li><span class=en>File extension .rex must be properly associated</span><span class=ru>Расширение имени файлов .rex должно быть правильно ассоциировано</span>
+</ul></td>
+
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Installation</span><span class=ru>Установка</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<span class=en>Installation procedure not required.</span>
+<span class=ru>Какая-либо специальная установка не требуется.</span>
+</td>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Usage:</span><span class=ru>Применение</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<ol>
+<li><span class=en>Procedure AWSLOAD has two mandatory parameters: the 1st <i>awsfile</i> is a
+AWS tape image and the 2nd <i>file</i> is file sequential number or <b>*</b>.
+Procedure loads either a specified AWS tape file <i>file</i>
+or all tape files if second positional parameter is * to the disk current directory.
+Optional 3rd parameter may specify rename pattern.</span>
+<span class=ru>Процедура AWSLOAD имеет два обязательных параметра: 1ый параметр <i>awsfile</i>
+это имя файла с образом ленты AWS, 2ой параметр - это порядковый номер файла ленты или *.
+Процедура загружает указанный файл ленты AWS <i>file</i> 
+или все файлы ленты, если второй позиционный параметр * в текущий каталог диска; Необязательный
+третий параметр может указывать шаблон переименования файлов.</span>
+<br><span class=en>If -blp option was not specified, procedure analyze first tape block
+to determine if the tape has IBM standard labels. If tape has standard labels (SL),
+tape file number considered as logical, otherwise file number is physical. So, in case of SL tape command <span class=cmd>AWSLOAD JESSY.aws 1</span>
+would load physical file 2, and a command <span class=cmd>AWSLOAD JESSY.aws *</span> would load 19 files.</span>
+<span class=ru>Если параметр -blp не указан, процедура анализирует первый блок ленты
+чтобы определить, имеет ли лента стандартные метки IBM. Если лента имеет стандартные 
+метки, номер файла рассматривается как логический, иначе номер файла является физическим. Таким образом, команда <span class=cmd>AWSLOAD JESSY.aws 1</span>
+загрузит физический файл 2, а команда <span class=cmd>AWSLOAD JESSY.aws *</span> загрузит 19 файлов ленты;</span>
+<br><span class=en>If -blp option specified, procedure do not check labels, file number 
+considered as physical. This is is same behaviour as z/OS LABEL=(,BLP). For example, command
+<span class=cmd>AWSLOAD -blp JESSY.AWS 1</span> would load 1st physical file,
+and command <span class=cmd>AWSLOAD -blp JESSY.AWS *</span> would load 58 files;</span>
+<span class=ru>Если параметр -blp указан, процедура не анализирует наличие меток, а
+номер файла рассматривается как физический. Это такая же логика как и z/OS LABEL=(,BLP);
+Так, например, команда <span class=cmd>AWSLOAD -blp JESSY.AWS 1</span> загрузит 1-ый физический файл ленты, а
+команда <span class=cmd>AWSLOAD -blp JESSY.AWS *</span> загрузит 58 файлов.</span>
+<br>
+<li><span class=en>File name of the loaded file(s) build using specified or
+defaulted rename pattern. Rename pattern may contains the following substituted
+pseudovariables:
+<ul>
+<li>%N% - substituted with logical file number (SL) or physical file number (NL, BLP)
+<li>%F% - substituted with 3 digits logical file number (SL) or physical file number (NL, BLP)
+<li>%D% - substituted with data set name (SL) or empty string (NL, BLP)
+<li>%L% - substituted with tape label (SL) or empty string (NL, BLP)
+</ul>
+If rename pattern is not specified, default pattern %D% is used for SL tape,
+otherwise (NL, BLP) used FILE%F% pattern.
+</span>
+<span class=ru>Имя загружаемого файла (файлов) формируется с использованием указаннного
+или пдразумеваемого по умолчанию шаблона переименования. Шаблон переименования 
+может содержать следующие подставляемые псевдопеременные:
+<ul>
+<li>%N% - подставляется логический (SL) или физический номер файла (NL, BLP)
+<li>%F% - подставляется логический (SL) или физический номер файла (NL, BLP) дополненный нулями слева до 3 цифр
+<li>%D% - подставляется имя набора данных (SL) или пустая строка (NL, BLP)
+<li>%L% - подставляется метка ленты (SL) или пустая строка (NL, BLP)
+</ul>
+Если шаблон переименования не указан, используется шаблон по умолчанию %D% для
+ленты SL и FILE%F% в противном случае (NL, BLP).
+</span>
+<br>
+<span class=en>So, the command <span class=cmd>AWSLOAD -blp JESSY.AWS * JGTAPE.FILE%F%</span>
+would load files named JGTAPE.FILE001, JGTAPE.FILE002 etc., 
+the command <span class=cmd>AWSLOAD JESSY.AWS * %L%.%D%</span> would load files named
+JGTAPE.INSTALL, JGTAPE.JESSY.INSTAL etc.</span>
+<span class=ru>Таким образом, команда <span class=cmd>AWSLOAD -prefix JGTAPE -blp JESSY.AWS *</span>
+загрузит файлы с именами JGTAPE.FILE001, JGTAPE.FILE002 и т.д., команда
+<span class=cmd>AWSLOAD JESSY.AWS * %L%.%D%</span> загрузит файлы с именами
+JGTAPE.INSTALL, JGTAPE.JESSY.INSTAL etc. </span>
+
+<br>
+<li><span class=en>Data translation and reblocking. If option -text specified (this is the default
+option), data would be translated from EBCDIC to ASCII. The options -ascii and -ebcdic
+may be used to specify a particular code pages for translation. If both -ascii and -ebcdic
+are missed, an internal translation table is used. This internal table specified
+1025 to 1251 translation.
+When option -text is in effect, data may be also reblocked, if option -reblock specified.
+<br>This may be useful when original tape file contains blocked records. For example,
+an old documantation tape contains blocks up to 32250, the following command may
+load such file to normal text: <span class=cmd>AWSLOAD -reblock 129 BOSDOC.AWS 4</span>
+<br>If option -binary specified, original data remains unchanged.</span>
+<span class=ru>Перекодировка и деблокирование данных. Если указан режим -text
+(этот режим активен по умолчанию), 
+данные транслируются из кода EBCDIC в код ASCII. Режимы -ascii и -ebcdic
+могут использоваться чтобы определить, какие именно кодовые таблицы используются при
+перекодировке. Если режимы -ascii и -ebcdic не указаны, используется внутренная
+таблица перекодировки, которая определяет перекодировку из 1025 в 1251.
+Если действует режим -text данные могут быть деблокированы. Например,
+старая документация OC EC поставлялась на лентах в файлах с записями длиной 129 блокированных
+в блоки длиной 32250. Следующая команда загружает такой файл разблокируя записи,
+так что полученный текстовый файл может просматриваться стандартными средствами:
+<span class=cmd>AWSLOAD -reblock 129 BOSDOC.AWS 4</span>
+<br>Если указан режим -binary оригинальные данные остаются неизменными.</span>
+</span>
+</ol>
+</ul>
+</table>
+
+<span class=en>&copy; 2022-2023 Gregori Bliznets gregorytwin@gmail.com</span>
+<span class=ru>&copy; 2022-2023 Григорий Близнец gregorytwin@gmail.com</span>
+</body>
+</html>

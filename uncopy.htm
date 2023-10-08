@@ -1,0 +1,184 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head><title>UNCOPY - load member(s) from IEBCOPY image</title></head>
+<style>
+body {background-color:white;color:black;font-family:Verdana;}
+td.n, td.b {font-family:Verdana;font-weight:normal;font-size:12pt;}
+td.n {font-weight:normal;}
+td.b {font-weight:bold; width: 120px;}
+a.plain, a.plain:link, a.plain:hover {color:black;}
+table.screen {background-color: black; border-spacing: 0px 0px 0px 0px;
+    border-collapse: collapse;}
+table.screen tr {background-color: black; }
+table.screen tr td {display: block; unicode-bidi: embed;
+   font-family: monospace; font-size: 16px; white-space: pre;
+   padding: 0px; margin: 0px; height: 18px; }
+span.brite {background-color:lightyellow;color:black;}
+span.border {border: 1px solid black;}
+span.green, span.turq, span.white, span.blue, span.red,
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {background:black;font-style:normal;}
+span.green, span.turq, span.white, span.blue, span.red, span.yellow
+ {font-weight:normal;}
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {font-weight:bold;}
+span.turq, span.turqbold {color:turquoise;}
+span.white, span.whitebold {color:white;}
+span.green {color:green;}
+span.blue {color:deepSkyBlue;}
+span.red, span.redbold {color:red;}
+span.yellow {color:yellow;}
+span.jcl {color:black; font-weight:normal; font-style:normal; font-size:10pt;}
+span.cursor
+ {color:black; background:green; font-weight:normal; font-style:normal;}
+span.cmd, span.hrc, span.sys { font-family: Courier; font-weight: bold; white-space: nowrap;}
+span.sys { color: black; background-color: lightgrey; }
+span.cmd { color: lightgrey; background-color: black; }
+span.hrc { color: yellow; background-color: black; }
+div.sticky { position: -webkit-sticky; /* Safari */ position:sticky; float:right; top:0;}
+</style>
+<script>
+function RU() {
+  view('RU', 'block');
+  view('EN', 'none');
+}
+
+function EN() {
+  view('RU', 'none');
+  view('EN', 'block');
+}
+
+function view(lang, attr) {
+  Array.from(document.getElementsByClassName(lang)).forEach (item => { item.style.display = attr; });
+}
+
+</script>
+<body onload=EN();>
+<div class=sticky>
+<button id="EN" type="button" onclick="EN()" title="EN"><span style="font-size:14px;">EN</span>
+<button id="RU" type="button" onclick="RU()" title="RU"><span style="font-size:14px;">RU</span>
+</button>
+</div>
+
+<table>
+<tr><td class=b>
+<span class=en>Function:</span>
+<span class=ru>Функция:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<span class=en>List and load member(s) from IEBCOPY image.</span>
+<span class=ru>Список разделов и их загрузка из файла, выгруженного IEBCOPY.</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Syntax:</span><span class=ru>Формат:</span><td>&nbsp;<tr><td class=n>&nbsp;
+<tr><td class=b>&nbsp;<td class=n><span class=border>&nbsp;<b>UNCOPY</b>&nbsp;[<i>options</i>] <i>iebcopy</i> [{<i>member</i>|*} [<i>rename</i>]]</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Options:</span><span class=ru>Режимы:</span><td>&nbsp;
+<tr><td class=b>&nbsp;<td class=n>-<b>b</b>inary | <u>-<b>t</b>ext</u>
+<br>-<b>e</b>bcdic <i>codepage</i>
+<br>-<b>a</b>scii <i>codepage</i>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Prerequested</span><span class=ru>Требования:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<ul>
+<li><span class=en>Either Open object REXX (OOREXX) or Regina REXX</span><span class=ru>Open Object REXX (OOREXX) либо Regina REXX</span>
+<li><span class=en>File extension .rex must be properly associated</span><span class=ru>Расширение имени файлов .rex должно быть правильно ассоциировано</span>
+</ul></td>
+
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Installation</span><span class=ru>Установка</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<span class=en>Installation procedure not required.</span>
+<span class=ru>Какая-либо специальная установка не требуется.</span>
+</td>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Usage:</span><span class=ru>Применение</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<ol>
+<li><span class=en>Procedure UNCOPY has single mandatory parameter <i>iebcopy</i> - name of IEBCOPY image.
+An optional 2nd parameter could specify member to be processed or * to process all
+members. 3rd parameter if specified is a rename pattern.
+<br>When 2nd and 3rd parameters are missed procedure lists all member names from IEBCOPY image file:.
+</span>
+<span class=ru>Процедура UNCOPY имеет один обязательный параметр <i>iebcopy</i> - имя файла с образом набора
+данных, выгруженного IEBCOPY. Второй параметр может указывать имя обрабатываемого
+раздела или *, что указывает обработку всех разделов. Третий параметр, если он указан,
+это шаблон переименования разделов.
+<br>Если второй и третий параметры отсутствует, процедура отображает список разделов выгруженного
+библиотечного набора данных:
+</span>
+<table class=screen>
+<tr><td><span class=white>F:\&gt;uncopy.rex MVSFILE</span>
+<tr><td><span class=white>022I Data set attributes: DSORG=PO,RECFM=VB,LRECL=255,BLKSIZE=8209          </span>
+<tr><td><span class=white>020I Member $INDEXPD TTR 001104</span>
+<tr><td><span class=white>020I Member QM001181 TTR 000107</span>
+<tr><td>
+</table>
+<br>
+<li><span class=en>File name of the extracted member(s) build using
+rename pattern, where %M% substituted with original member name. If rename pattern is not
+specified, default pattern %M% is used, and file would be  
+an original member name.</span>
+<span class=ru>Имя файла с излекаемым разделом (разделами) формируется на
+основании шаблона переименования, при этом %M% заменяется именем оригинального
+раздела. Если шаблон переименования не был указан, по умолчанию используется
+шаблон %M%, и именем файла будет оригинальное имя раздела.</span>
+<br><span class=en>So, command</span>
+<span class=ru>Так, команда</span>
+<span class=cmd>uncopy.rex MVSFILE *</span>
+<span class=en>extract members with file names $INDEXPD and QM001181</span>
+<span class=ru>извлечет разделы с именами $INDEXPD и QM001181</span>
+<br><span class=en>Command</span>
+<span class=ru>Команда</span>
+<span class=cmd>uncopy.rex MVSFILE * %m.txt</span>
+<span class=en>extract members with file names $INDEXPD.txt and QM001181.txt</span>
+<span class=ru>извлечет разделы с именами $INDEXPD.txt и QM001181.txt</span>
+
+<br>
+<li><span class=en>Data translation. If option -text specified (this is the default
+option), data would be translated from EBCDIC to ASCII. The options -ascii and -ebcdic
+may be used to specify a particular code pages for translation. If both -ascii and -ebcdic
+are missed, an internal translation table is used. This internal table specified
+1025 to 1251 translation.
+<br>If option -binary specified, original data remains unchanged.</span>
+<span class=ru>Перекодировка данных. Если указан режим -text
+(этот режим активен по умолчанию), данные транслируются из кода EBCDIC в код ASCII.
+Режимы -ascii и -ebcdic могут использоваться чтобы определить, какие именно кодовые
+таблицы используются при перекодировке. Если режимы -ascii и -ebcdic не указаны,
+используется внутренная таблица перекодировки, которая определяет перекодировку из
+1025 в 1251.
+<br>Если указан режим -binary оригинальные данные остаются неизменными.</span>
+</span>
+<table class=screen>
+<tr><td><span class=white>F:\&gt;uncopy.rex -b -s pdf MVSFILE QM001181</span>
+<tr><td><span class=white>022I Data set attributes: DSORG=PO,RECFM=VB,LRECL=255,BLKSIZE=8209          </span>
+<tr><td><span class=white>018I Member QM001181.pdf extracted</span>
+<tr><td>
+</table>
+<table class=screen>
+<tr><td><span class=white>F:\&gt;uncopy.rex -s txt MVSFILE $INDEXPD</span>
+<tr><td><span class=white>022I Data set attributes: DSORG=PO,RECFM=VB,LRECL=255,BLKSIZE=8209          </span>
+<tr><td><span class=white>018I Member $INDEXPD.txt extracted</span>
+<tr><td>
+</table>
+</ul>
+<br>
+<li><span class=en>The most useful UNCOPY usage is a processing of IBM ESD
+(Electronic Software Delivery) files. Such files produced by SMP/E GIMZIP
+utility and look like S0005.CSP.STP99999.PGMDIR.pax.Z. To process data on the PC 
+you need first extract file called MVSFILE from archieve using 7z or it equivalent (uncompress and tar).
+Then MVSFILE could be processed with UNCOPY, because MVSFILE is a IEBCOPY image.
+</span>
+<span class=ru>Наиболее частое применение UNCOPY это обработка файлов поставки
+IBM ESD (Electronic Software Delivery). Такие файлы построены утилитой SMP/E
+GIMZIP и выглядят как S0005.CSP.STP99999.PGMDIR.pax.Z. Чтобы обработать данные
+необходимо вначале извлечь файл с именем MVSFILE из архива. Это можно сделать
+с помощью программы 7z или ее эквивалента (uncompress и tar). После этого файл MVSFILE можно обработать
+UNCOPY, так как MVSFILE представляет собой образ набора данных, выгруженного 
+IEBCOPY.</span>
+</span>
+
+</table>
+
+<span class=en>&copy; 2022-2023 Gregori Bliznets gregorytwin@gmail.com</span>
+<span class=ru>&copy; 2022-2023 Григорий Близнец gregorytwin@gmail.com</span>
+</body>
+</html>

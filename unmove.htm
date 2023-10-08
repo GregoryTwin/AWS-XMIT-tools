@@ -1,0 +1,172 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head><title>UNMOVE - load member(s) from IEHMOVE image</title></head>
+<style>
+body {background-color:white;color:black;font-family:Verdana;}
+td.n, td.b {font-family:Verdana;font-weight:normal;font-size:12pt;}
+td.n {font-weight:normal;}
+td.b {font-weight:bold; width: 120px;}
+a.plain, a.plain:link, a.plain:hover {color:black;}
+table.screen {background-color: black; border-spacing: 0px 0px 0px 0px;
+    border-collapse: collapse;}
+table.screen tr {background-color: black; }
+table.screen tr td {display: block; unicode-bidi: embed;
+   font-family: monospace; font-size: 16px; white-space: pre;
+   padding: 0px; margin: 0px; height: 18px; }
+span.brite {background-color:lightyellow;color:black;}
+span.border {border: 1px solid black;}
+span.green, span.turq, span.white, span.blue, span.red,
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {background:black;font-style:normal;}
+span.green, span.turq, span.white, span.blue, span.red, span.yellow
+ {font-weight:normal;}
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {font-weight:bold;}
+span.turq, span.turqbold {color:turquoise;}
+span.white, span.whitebold {color:white;}
+span.green {color:green;}
+span.blue {color:deepSkyBlue;}
+span.red, span.redbold {color:red;}
+span.yellow {color:yellow;}
+span.jcl {color:black; font-weight:normal; font-style:normal; font-size:10pt;}
+span.cursor
+ {color:black; background:green; font-weight:normal; font-style:normal;}
+span.cmd, span.hrc, span.sys { font-family: Courier; font-weight: bold; white-space: nowrap;}
+span.sys { color: black; background-color: lightgrey; }
+span.cmd { color: lightgrey; background-color: black; }
+span.hrc { color: yellow; background-color: black; }
+div.sticky { position: -webkit-sticky; /* Safari */ position:sticky; float:right; top:0;}
+</style>
+<script>
+function RU() {
+  view('RU', 'block');
+  view('EN', 'none');
+}
+
+function EN() {
+  view('RU', 'none');
+  view('EN', 'block');
+}
+
+function view(lang, attr) {
+  Array.from(document.getElementsByClassName(lang)).forEach (item => { item.style.display = attr; });
+}
+
+</script>
+<body onload=EN();>
+<div class=sticky>
+<button id="EN" type="button" onclick="EN()" title="EN"><span style="font-size:14px;">EN</span>
+<button id="RU" type="button" onclick="RU()" title="RU"><span style="font-size:14px;">RU</span>
+</button>
+</div>
+
+<table>
+<tr><td class=b>
+<span class=en>Function:</span>
+<span class=ru>Функция:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<span class=en>List and load member(s) from IEHMOVE image.</span>
+<span class=ru>Список разделов и их загрузка из файла, выгруженного IEHMOVE.</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Syntax:</span><span class=ru>Формат:</span><td>&nbsp;<tr><td class=n>&nbsp;
+<tr><td class=b>&nbsp;<td class=n><span class=border>&nbsp;<b>UNMOVE</b>&nbsp;[<i>options</i>] <i>iehmove</i> [{<i>member</i>|*} [<i>rename</i>]]</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Options:</span><span class=ru>Режимы:</span><td>&nbsp;
+<tr><td class=b>&nbsp;<td class=n>-<b>b</b>inary | <u>-<b>t</b>ext</u>
+<br>-<b>e</b>bcdic <i>codepage</i>
+<br>-<b>a</b>scii <i>codepage</i>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Prerequested</span><span class=ru>Требования:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<ul>
+<li><span class=en>Either Open object REXX (OOREXX) or Regina REXX</span><span class=ru>Open Object REXX (OOREXX) либо Regina REXX</span>
+<li><span class=en>File extension .rex must be properly associated</span><span class=ru>Расширение имени файлов .rex должно быть правильно ассоциировано</span>
+</ul></td>
+
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Installation</span><span class=ru>Установка</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<span class=en>Installation procedure not required.</span>
+<span class=ru>Какая-либо специальная установка не требуется.</span>
+</td>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Usage:</span><span class=ru>Применение</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<ol>
+<li><span class=en>Procedure UNMOVE has single mandatory parameter <i>iehmove</i> - name of IEHMOVE image.
+An optional 2nd parameter could specify member to be processed or * to process all
+members, 3rd parameter may specify member rename pattern.
+<br>When 2nd and 3rd parameters are missed procedure lists all member names from IEHMOVE image file:
+</span>
+<span class=ru>Процедура UNMOVE имеет один обязательный параметр <i>iehmove</i> имя файла с образом набора
+данных, выгруженного IEHMOVE. Второй параметр может указывать имя обрабатываемого
+раздела или *, что указывает обработку всех разделов, третий параметр указывает шаблон 
+переименования разделов.
+<br>Если второй и третий параметры отсутствует, процедура отображает список разделов выгруженного
+библиотечного набора данных:
+</span>
+<table class=screen>
+<tr><td><span class=white>F:\&gt;unmove.rex JESSY.INSTALL
+<tr><td><span class=white>021I Data set JESSY.INSTALL from SVSKKK
+<tr><td><span class=white>022I Data set attributes: DSORG=PO,RECFM=FB,LRECL=80,BLKSIZE=800
+<tr><td><span class=white>020I Member COPYPROC TTR 000000
+<tr><td><span class=white>020I Member INSTALL  TTR 000302
+<tr><td><span class=white>020I Member MVT5050  TTR 000803
+<tr><td><span class=white>020I Member MVT5061  TTR 000406
+<tr><td><span class=white>020I Member MVT5066  TTR 00030D
+<tr><td><span class=white>020I Member PRTINSTR TTR 000502
+<tr><td><span class=white>020I Member SERVLOC  TTR 000706
+<tr><td><span class=white>020I Member SVS5050  TTR 00020F
+<tr><td><span class=white>020I Member SVS5061  TTR 000704
+<tr><td><span class=white>020I Member SVS5066  TTR 000608
+<tr><td>
+</table>
+
+<br>
+<li><span class=en>File name of the extracted member(s) or data set build using
+rename pattern, where %M% substituted with original member name and %D% substituted
+with original data set name. If rename pattern is not specified, default pattern
+%M% is used for partitioned data set and %D% for other data sets. So, extracted members
+and a data sets would keept their original names.</span>
+<span class=ru>Имя файла с извлекаемым разделом (разделами) формируется на
+основании шаблона переименования, при этом %M% заменяется именем оригинального
+раздела а %D% - именем оригинального набора данных. Если шаблон переименования
+не был указан, по умолчанию для библиотечных наборов данных используется
+шаблон %M%, и именем файла будет оригинальное имя раздела, а для наборов других
+организации %D%, т.е. имя оригинального набора данных.</span>
+<br>
+<li><span class=en>Data translation. If option -text specified (this is the default
+option), data would be translated from EBCDIC to ASCII. The options -ascii and -ebcdic
+may be used to specify a particular code pages for translation. If both -ascii and -ebcdic
+are missed, an internal translation table is used. This internal table specified
+1025 to 1251 translation.
+<br>If option -binary specified, original data remains unchanged.</span>
+<span class=ru>Перекодировка данных. Если указан режим -text
+(этот режим активен по уолчанию), 
+option), данные транслируются из кода EBCDIC в код ASCII. Режимы -ascii и -ebcdic
+могут использоваться чтобы определить, какие именно кодовые таблицы используются при
+перекодировке. Если режимы -ascii и -ebcdic не указаны, используется внутренная
+таблица перекодировки, которая определяет перекодировку из 1025 в 1251.
+<br>Если указан режим -binary оригинальные данные остаются неизменными.</span>
+</span>
+<table class=screen>
+<tr><td><span class=white>F:\&gt;unmove.rex JESSY.INSTALL INSTALL
+<tr><td><span class=white>021I Data set JESSY.INSTALL from SVSKKK
+<tr><td><span class=white>022I Data set attributes: DSORG=PO,RECFM=FB,LRECL=80,BLKSIZE=800
+<tr><td><span class=white>018I Member INSTALL extracted to INSTALL
+<tr><td>
+</table>
+<br>
+<li><span class=en>Data sets unloaded by IEHMOVE suitable for network transfer
+due to fixed record format. However, such files used very rearly. </span>
+<span class=ru>Наборы данных, выгруженные IEHMOVE, пригодны для передачи по сети,
+так как имеют фиксированную длину записи (80). Однако, на практике этот формат используется
+очень редко.</span>
+</ul>
+<br>
+</table>
+
+<span class=en>&copy; 2022-2023 Gregori Bliznets gregorytwin@gmail.com</span>
+<span class=ru>&copy; 2022-2023 Григорий Близнец gregorytwin@gmail.com</span>
+</body>
+</html>

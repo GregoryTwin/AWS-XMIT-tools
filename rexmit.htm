@@ -1,0 +1,150 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head><title>REXMIT - anonymize XMIT (TRANSMIT, IDTF) image</title></head>
+<style>
+body {background-color:white;color:black;font-family:Verdana;}
+td.n, td.b {font-family:Verdana;font-weight:normal;font-size:12pt;}
+td.n {font-weight:normal;}
+td.b {font-weight:bold; width: 120px;}
+a.plain, a.plain:link, a.plain:hover {color:black;}
+table.screen {background-color: black; border-spacing: 0px 0px 0px 0px;
+    border-collapse: collapse;}
+table.screen tr {background-color: black; }
+table.screen tr td {display: block; unicode-bidi: embed;
+   font-family: monospace; font-size: 16px; white-space: pre;
+   padding: 0px; margin: 0px; height: 18px; }
+span.brite {background-color:lightyellow;color:black;}
+span.border {border: 1px solid black;}
+span.green, span.turq, span.white, span.blue, span.red,
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {background:black;font-style:normal;}
+span.green, span.turq, span.white, span.blue, span.red, span.yellow
+ {font-weight:normal;}
+span.greenbold, span.turqbold, span.whitebold, span.bluebold, span.redbold
+ {font-weight:bold;}
+span.turq, span.turqbold {color:turquoise;}
+span.white, span.whitebold {color:white;}
+span.green {color:green;}
+span.blue {color:deepSkyBlue;}
+span.red, span.redbold {color:red;}
+span.yellow {color:yellow;}
+span.jcl {color:black; font-weight:normal; font-style:normal; font-size:10pt;}
+span.cursor
+ {color:black; background:green; font-weight:normal; font-style:normal;}
+span.cmd, span.hrc, span.sys { font-family: Courier; font-weight: bold; white-space: nowrap;}
+span.sys { color: black; background-color: lightgrey; }
+span.cmd { color: lightgrey; background-color: black; }
+span.hrc { color: yellow; background-color: black; }
+div.sticky { position: -webkit-sticky; /* Safari */ position:sticky; float:right; top:0;}
+</style>
+<script>
+function RU() {
+  view('RU', 'block');
+  view('EN', 'none');
+}
+
+function EN() {
+  view('RU', 'none');
+  view('EN', 'block');
+}
+
+function view(lang, attr) {
+  Array.from(document.getElementsByClassName(lang)).forEach (item => { item.style.display = attr; });
+}
+
+</script>
+<body onload=EN();>
+<div class=sticky>
+<button id="EN" type="button" onclick="EN()" title="EN"><span style="font-size:14px;">EN</span>
+<button id="RU" type="button" onclick="RU()" title="RU"><span style="font-size:14px;">RU</span>
+</button>
+</div>
+
+<table>
+<tr><td class=b>
+<span class=en>Function:</span>
+<span class=ru>Функция:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<span class=en>Anonomyze XMIT (TRANSMIT, IDTF) image - updates origin node, origin userid, origin data set name.</span>
+<span class=ru>Анонимизация (TRANSMIT, IDTF) файла - замена имени узла, имени пользователя, имени набора данных.</span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Syntax:</span><span class=ru>Формат:</span><td>&nbsp;<tr><td class=n>&nbsp;
+<tr><td class=b>&nbsp;<td class=n><span class=border>&nbsp;<b>REXMIT</b>&nbsp;[<i>options</i>] <i>input</i> <i>output</i></span>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Options:</span><span class=ru>Режимы:</span><td>&nbsp;
+<tr><td class=b>&nbsp;<td class=n>-<b>n</b>ode <i>node</i>
+<br>-<b>u</b>serid <i>userid</i>
+<br>-<b>d</b>sname <i>dsname</i>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Prerequested</span><span class=ru>Требования:</span><td>&nbsp;
+<tr><td class=n>&nbsp;<td class=n>
+<ul>
+<li><span class=en>Either Open object REXX (OOREXX) or Regina REXX</span><span class=ru>Open Object REXX (OOREXX) либо Regina REXX</span>
+<li><span class=en>File extension .rex must be properly associated</span><span class=ru>Расширение имени файлов .rex должно быть правильно ассоциировано</span>
+</ul></td>
+
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Installation</span><span class=ru>Установка</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<span class=en>Installation procedure not required.</span>
+<span class=ru>Какая-либо специальная установка не требуется.</span>
+</td>
+<tr><td colspan=2>&nbsp;
+<tr><td class=b><span class=en>Usage:</span><span class=ru>Применение</span><td>&nbsp;<tr><td class=n>&nbsp;
+<td class=n>
+<span class=en>Procedure UNXMIT has two mandatory parameters: <i>input</i> - an original XMIT file
+and <i>output</i> - processed XMIT file. At least one option should be specified (otherwise there is nothing to do)</span>
+<span class=ru>Процедура UNXMIT имеет два обязательных параметра <i>input</i> - имя оригинального XMIT 
+файла и <i>output</i> - имя обработанного файла. Должен быть уазан хотя бы один режим, так как иначе нечего
+преобразовывать</span>
+<table class=screen>
+<tr><td><span class=white>F:\&gt;unxmit.rex FILE845.XMI
+<tr><td><span class=yellow>021I Data set 'CBT.V495.FILE845.PDS' from SBGOLOB at N1          
+<tr><td><span class=white>020I Member $$$#DATE TTR 000204
+<tr><td><span class=white>020I Member $README  TTR 000206
+<tr><td><span class=white>020I Member @FILE845 TTR 000208
+<tr><td><span class=white>020I Member HOSTCMD  TTR 00020A
+<tr><td><span class=white>020I Member HOSTCMD$ TTR 00020E
+<tr><td><span class=white>020I Member HOSTCMD# TTR 000210
+<tr><td><span class=white>020I Member IKJTSO00 TTR 000212
+<tr><td><span class=white>020I Member RUNAUTH  TTR 000304
+<tr><td><span class=white>020I Member RUNAUTH$ TTR 000308
+<tr><td><span class=white>020I Member RUNAUTH# TTR 00030A
+<tr><td><span class=white>020I Member RUNAUTH@ TTR 00030C
+<tr><td><span class=white>020I Member SYSCMD   TTR 00030E
+<tr><td><span class=white>020I Member SYSCMD$  TTR 000311
+<tr><td><span class=white>020I Member SYSCMD#  TTR 000313
+<tr><td>
+</table>
+<br>
+<table class=screen>
+<tr><td><span class=white>F:\&gt;rexmit -user NOBODY -node NOWHERE FILE845.XMI FILE845.XMO    
+<tr><td><span class=white>011I Retransmitting file FILE845.XMI to FILE845.XMO
+<tr><td>
+</table>
+<br>
+<table class=screen>
+<tr><td><span class=white>F:\>unxmit.rex FILE845.XMO
+<tr><td><span class=yellow>021I Data set 'CBT.V495.FILE845.PDS' from NOBODY at NOWHERE      
+<tr><td><span class=white>020I Member $$$#DATE TTR 000204
+<tr><td><span class=white>020I Member $README  TTR 000206
+<tr><td><span class=white>020I Member @FILE845 TTR 000208
+<tr><td><span class=white>020I Member HOSTCMD  TTR 00020A
+<tr><td><span class=white>020I Member HOSTCMD$ TTR 00020E
+<tr><td><span class=white>020I Member HOSTCMD# TTR 000210
+<tr><td><span class=white>020I Member IKJTSO00 TTR 000212
+<tr><td><span class=white>020I Member RUNAUTH  TTR 000304
+<tr><td><span class=white>020I Member RUNAUTH$ TTR 000308
+<tr><td><span class=white>020I Member RUNAUTH# TTR 00030A
+<tr><td><span class=white>020I Member RUNAUTH@ TTR 00030C
+<tr><td><span class=white>020I Member SYSCMD   TTR 00030E
+<tr><td><span class=white>020I Member SYSCMD$  TTR 000311
+<tr><td><span class=white>020I Member SYSCMD#  TTR 000313
+<tr><td>
+</table>
+</table>
+<br>
+<span class=en>&copy; 2022-2023 Gregori Bliznets gregorytwin@gmail.com</span>
+<span class=ru>&copy; 2022-2023 Григорий Близнец gregorytwin@gmail.com</span>
+</body>
+</html>
