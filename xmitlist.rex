@@ -17,8 +17,6 @@ Usage:
 
 */
 trace off
-call rxfuncadd 'sysloadfuncs', 'rexxutil', 'sysloadfuncs'
-call sysloadfuncs
 xmitlist = 'XMITLIST 1.3'
 nbyte = 0
 nfile = 1
@@ -33,9 +31,9 @@ possible to merge all together, using address() and parameters passed.
 if address() = 'THE'
 then signal the /* We are called by THE */
 cmd: /* We are called by shell (command interpreter) */
-parse arg args
 call rxfuncadd 'sysloadfuncs', 'rexxutil', 'sysloadfuncs'
 call sysloadfuncs
+parse arg args
 /* don't check system environment, let suppose REXX and THE are here */
 opt = '-'
 xmitfile = ''
